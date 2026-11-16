@@ -548,16 +548,7 @@ enum ParamEnums
 	PAR_RAND_GO,
 	PAR_RAND_UNDO,
 
-	// MODIFIED: morph only one voice (0 = all voices, 1..7 = voice 1..7). Menu only, not saved.
-	PAR_MORPH_VOICE,
-
-	// MODIFIED: morph chain (menu only, not saved). See Preset/morphChain.h
-	PAR_MORPH_SOURCE,	// source kit 0..127 (defaults to the loaded kit)
-	PAR_MORPH_AUTO,		// auto-advance on/off
-	PAR_MORPH_LO,		// kit range used by auto-advance and CV selection
-	PAR_MORPH_HI,
-	PAR_MORPH_SRC_CV,	// 0 = off, 1..5 = CV jack that selects the source kit
-	PAR_MORPH_TGT_CV,	// 0 = off, 1..5 = CV jack that selects the target kit
+	// RXl-0: Golem's per-voice morph and morph chain parameters were here (menu only, removed)
 
 	// RXl-0 (from LXRE_MX): CONFIG page audio block load [%], read only, not saved
 	PAR_CPU_LOAD,

@@ -59,7 +59,6 @@ add_library(lxr_ui OBJECT
 add_library(lxr_preset OBJECT
     Src/Preset/initKit.c
     Src/Preset/presetManager.c
-    Src/Preset/morphChain.c
     Src/Preset/kitGen.c
     Src/Preset/kitGenUi.c
 )

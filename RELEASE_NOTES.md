@@ -20,6 +20,9 @@ Unofficial: not made, approved or supported by Erica Synths or by the authors of
 - Voice edit mode: the edited drum's LED is lit (its triggers flash it off) and the open sub-page LED blinks.
 - Voice 7's sound engine sits in fast DTCM memory like voices 1–6.
 - A plain FX press cycles the FX pages (as before). SHIFT + FX is now the voice routing shortcut.
+- The Performance page is the stock one again (morph, morph target, sample rate). Golem's per-voice morph,
+  morph chain (source kit, auto-advance, kit range) and the CV kit selection on global settings sub-page 2 are
+  removed. Outputs, choke and voice links still never morph.
 - Kit files are unchanged: kits move freely between Golem-RMX-0 and RXl-0.
 
 ---

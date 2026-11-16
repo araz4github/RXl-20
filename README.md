@@ -16,7 +16,8 @@ What RXl-0 changes compared to Golem-RMX-0:
 Golem-RMX-0 itself combines two community firmwares:
 
 - **Golem** by Zach ([almogzach](https://github.com/almogzach)): a second FX bus, a fully separate open hi-hat
-  (voice 7), a parameter randomizer, per-voice morph and a morph chain with CV kit selection.
+  (voice 7), a parameter randomizer, per-voice morph and a morph chain with CV kit selection (the last two are
+  not in RXl-0).
 - **[RMX-0](https://github.com/mechanical-dance/RMX-0) by [mechanical-dance](https://github.com/mechanical-dance)**: new LFO shapes, click-free
   retriggers, a restart menu, MIDI input with voice links and glide, user samples
   and a global reverb.
@@ -108,17 +109,13 @@ It changes pitch, waveforms, envelopes, FM, transient, filter, drive, sample rat
 limits (drum-length decays, no filter self-oscillation, moderate drive). It never changes volumes, outputs,
 FX routing, choke, velocity response, the FX buses, morph or the CV mod matrix.
 
-### G4. Per-voice morph
-The Performance page has a new **mvc** (morph voice) control. `all` morphs the whole kit as before; `v1`–`v7`
-morphs only that voice toward the same voice in the morph target kit. Outputs and choke never morph.
-Voice 7's own settings take part in morphing toward kits saved with Golem.
+### G4. Morph (stock Performance page in RXl-0)
+RXl-0 removes Golem's per-voice morph (**mvc**) and morph chain (**msr**, **aut**, **lo**/**hi**, and the **scv**/**tcv**
+CV kit selection). The Performance page is the stock one again: **mrp** morphs the whole kit toward **mtg**.
+Kept from Golem: outputs, choke and voice links never morph, and voice 7 only morphs toward kits saved with its own
+voice 7 settings.
 
-### G5. Morph chain
-- **msr** picks the morph source kit (the edit buffer by default), **mtg** the target. Changes wait until the morph
-  knob is at the silent end, so switching kits never glitches.
-- **aut** auto-advances: each time the morph reaches one end, the kit on that side steps to the next kit in the
-  **lo**–**hi** range, so sweeping back and forth walks through a chain of kits.
-- **scv**/**tcv** (global settings, sub-page 2) let CV inputs choose the source and target kits.
+### G5. Other Golem fixes
 - The delay no longer glitches when a CV moves its time, and a mod-target bug that read past the end of a table
   is fixed.
 
@@ -168,9 +165,7 @@ Voice 7's own settings take part in morphing toward kits saved with Golem.
   (OSC, AEG, MOD, FM, CLICK, FILTER, MIX) blinks. If both are the same LED, it blinks. While DRUM is held, the
   LEDs show the drum selection as before.
 - **SHIFT + PERF**: kit generator on / off (RXl-0).
-- Performance page: **mrp** (morph), **mtg** (morph target), **sr** (sample rate), **mvc** (morph voice) |
-  **msr** (morph source), **aut** (auto-advance), **lo**/**hi** (kit range).
-- Global settings, sub-page 2: **scv**/**tcv** pick the CV inputs that select the morph source and target kits.
+- Performance page (stock): **mrp** (morph), **mtg** (morph target), **sr** (sample rate).
 
 ## Your existing kits are safe
 - Kits from the official firmware load with voice 7 as a copy of the shared hat with choke on, the reverb

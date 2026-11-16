@@ -80,9 +80,7 @@ uint8_t voiceParams_isMorphed(uint16_t paramNr, uint8_t morphTargetKitValid7)
 	// voice 7 settings: only morph toward a kit that was saved with its own voice 7
 	if((paramNr >= PAR_HH7_COARSE) && (paramNr <= PAR_HH7_CHOKE) && !morphTargetKitValid7) return 0;
 
-	const uint8_t mv = activeParameters[PAR_MORPH_VOICE];
-	if(mv == 0 || mv > NUM_VOICE_PAGES) return 1;		// all voices: unchanged original behaviour
-	return (voiceParams_getVoiceMask(paramNr) >> (mv - 1)) & 1;
+	return 1;	// RXl-0: whole kit (Golem's per-voice morph removed)
 }
 
 //-----------------------------------------------------------------------------
@@ -92,13 +90,6 @@ void randomizer_init(void)
 	activeParameters[PAR_RAND_TARGET] = RANDOMIZER_TARGET_KIT;
 	activeParameters[PAR_RAND_GO] = 0;
 	activeParameters[PAR_RAND_UNDO] = 0;
-	activeParameters[PAR_MORPH_VOICE] = 0;	// morph all voices, as before
-	// morph chain defaults: manual, whole kit range, no CV
-	activeParameters[PAR_MORPH_AUTO] = 0;
-	activeParameters[PAR_MORPH_LO] = 0;
-	activeParameters[PAR_MORPH_HI] = 127;
-	activeParameters[PAR_MORPH_SRC_CV] = 0;
-	activeParameters[PAR_MORPH_TGT_CV] = 0;
 	randomizer_undoValid = 0;
 	voiceParams_build();
 }

@@ -48,8 +48,7 @@
 // 29: was Golem's FX bus B types (RXl-0: removed)
 #define MENU_RND_TARGET		30	// MODIFIED: randomizer target
 #define MENU_RND_ACT		31	// MODIFIED: randomizer go / undo
-#define MENU_MORPH_VOICE	32	// MODIFIED: morph voice select
-#define MENU_MORPH_CV		33	// MODIFIED: CV jack for morph kit selection
+// 32, 33: were Golem's morph voice / morph CV menus (removed in RXl-0)
 #define MENU_LXR0_LINK_MODE		34 // lxr-0
 #define MENU_LXR0_LINK_ALLOC	35 // lxr-0
 #define MENU_LXR0_GLIDE_TYPE	36 // lxr-0
@@ -223,30 +222,6 @@ const char rndTargetNames[][4] =
 	{"v6"},
 	{"v7"},
 	{"kit"},
-};
-// MODIFIED: which voice the morph knob affects
-const char morphVoiceNames[][4] =
-{
-	{8},		//number of entries
-	{"all"},
-	{"v1"},
-	{"v2"},
-	{"v3"},
-	{"v4"},
-	{"v5"},
-	{"v6"},
-	{"v7"},
-};
-// MODIFIED: CV jack that selects a morph kit
-const char morphCvNames[][4] =
-{
-	{6},		//number of entries
-	{"off"},
-	{"cv1"},
-	{"cv2"},
-	{"cv3"},
-	{"cv4"},
-	{"cv5"},
 };
 // MODIFIED: randomizer action. Turning the knob to "go!" runs it, then it returns to "---"
 const char rndActNames[][4] =
@@ -625,13 +600,6 @@ const char shortNames[][4]  =
 	{"tgt"},	// MODIFIED: randomizer target
 	{"rnd"},	// MODIFIED: randomize
 	{"und"},	// MODIFIED: undo randomize
-	{"mvc"},	// MODIFIED: morph voice
-	{"msr"},	// MODIFIED: morph chain
-	{"aut"},
-	{"lo"},
-	{"hi"},
-	{"scv"},
-	{"tcv"},
 #if LXR0_MIDI
 	{"t1"},
 	{"t2"},
@@ -827,13 +795,6 @@ const char longNames[][16] =
 	{"Target"},	// MODIFIED: randomizer
 	{"Randomze"},
 	{"Undo"},
-	{"MrphVoce"},	// MODIFIED: morph voice
-	{"MrphSrc"},	// MODIFIED: morph chain
-	{"AutoAdv"},
-	{"Range lo"},
-	{"Range hi"},
-	{"Src CV"},
-	{"Tgt CV"},
 #if LXR0_MIDI
 	{"MIDI In"},
 #endif

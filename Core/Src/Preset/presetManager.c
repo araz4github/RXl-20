@@ -32,7 +32,6 @@
 #include "Soundengine/Soundengine.h"
 #include "Soundengine/DSPAudio/mixer.h"	// RXl-0: MIXER_ROUTING_* for preset_dropFxBusB
 #include "menu/randomizer.h"	// MODIFIED: per-voice morph (voice parameter lists)
-#include "Preset/morphChain.h"	// MODIFIED: morph chain
 #include "Soundengine/DSPAudio/FX/lxr0_reverbBus.h" // lxr-0
 
 FRESULT preset_savePatternSD(uint8_t presetNr);
@@ -656,8 +655,6 @@ void preset_loadDrumsetRam(uint8_t presetNr, uint8_t isMorph, uint8_t sendImmedi
 
 		preset_saveLastUsedPresetNrToSD(presetNr);
 
-		// MODIFIED: morph chain. The loaded kit becomes the morph source.
-		morphChain_setLoadedKit(presetNr);
 	}
 	soundengine_process();
 
@@ -2111,12 +2108,6 @@ void preset_morph_tick()
 void preset_morph(uint8_t morph, uint8_t forceResetIndex)
 {
 #if 1
-	// MODIFIED: morph chain. Reaching an end of the morph may swap the silent kit.
-	if(morphChain_sync(morph))
-	{
-		forceResetIndex = 1;
-	}
-
 	if(forceResetIndex)
 	{
 		morph_index = 0; //reset index
@@ -2193,11 +2184,11 @@ static uint8_t preset_isFxBusSwitch(uint16_t index)
 //----------------------------------------------------
 uint8_t preset_getMorphValue(uint16_t index, uint8_t morph)
 {
-	// MODIFIED: per-voice morph and morph chain. The blend runs from the effective source
-	// kit (the edit buffer when it is the loaded kit) to the effective target kit.
-	// Parameters outside the selected morph voice, and routing, keep the loaded kit's value.
-	const uint8_t target = morphChain_targetKit();
-	const uint8_t* src = morphChain_sourceIsEditBuffer() ? activeParameters : mainParameters[morphChain_sourceKit()];
+	// RXl-0: stock morph (edit buffer -> PAR_MORPH_TARGET kit, whole kit). Golem's per-voice
+	// morph and morph chain are removed; routing, choke and voice links still keep the
+	// loaded kit's value, and voice 7 only morphs toward a kit saved with its own voice 7.
+	const uint8_t target = activeParameters[PAR_MORPH_TARGET];
+	const uint8_t* src = activeParameters;
 	const uint8_t valid7 = (src[PAR_HH7_VALID] != 0) && (mainParameters[target][PAR_HH7_VALID] != 0);
 	if(!voiceParams_isMorphed(index, valid7) || preset_isFxBusSwitch(index))
 	{

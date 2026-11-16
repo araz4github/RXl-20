@@ -11,7 +11,6 @@
 #include "Soundengine/DSPAudio/FX/lxr0_reverbBus.h"
 #include "menu/menu.h"
 #include "menu/randomizer.h"	// MODIFIED: parameter randomizer
-#include "Preset/morphChain.h"	// MODIFIED: morph chain
 #include "Preset/kitGen.h"		// RXl-0 (LXRE_MX): kit generator
 #include "Preset/kitGenUi.h"
 #include "fxRoute.h"				// RXl-0 (LXRE_MX): SHIFT+FX voice routing
@@ -326,13 +325,6 @@ const Name valueNames[NUM_NAMES] =
 		{SHORT_RND_TARGET, CAT_RND, LONG_RND_TARGET},	/*TEXT_RND_TARGET*/
 		{SHORT_RND_GO, CAT_RND, LONG_RND_GO},		/*TEXT_RND_GO*/
 		{SHORT_RND_UNDO, CAT_RND, LONG_RND_UNDO},	/*TEXT_RND_UNDO*/
-		{SHORT_MORPH_VOICE, CAT_SOUND, LONG_MORPH_VOICE},	/*TEXT_MORPH_VOICE*/	// MODIFIED
-		{SHORT_MORPH_SOURCE, CAT_SOUND, LONG_MORPH_SOURCE},	/*TEXT_MORPH_SOURCE*/	// MODIFIED: morph chain
-		{SHORT_MORPH_AUTO, CAT_SOUND, LONG_MORPH_AUTO},		/*TEXT_MORPH_AUTO*/
-		{SHORT_MORPH_LO, CAT_SOUND, LONG_MORPH_LO},			/*TEXT_MORPH_LO*/
-		{SHORT_MORPH_HI, CAT_SOUND, LONG_MORPH_HI},			/*TEXT_MORPH_HI*/
-		{SHORT_MORPH_SRC_CV, CAT_SOUND, LONG_MORPH_SRC_CV},	/*TEXT_MORPH_SRC_CV*/
-		{SHORT_MORPH_TGT_CV, CAT_SOUND, LONG_MORPH_TGT_CV},	/*TEXT_MORPH_TGT_CV*/
 		{SHORT_CPU, CAT_GLOBAL, LONG_CPU_LOAD},				/*TEXT_CPU_LOAD*/
 		{SHORT_TYPE, CAT_KGEN, LONG_TYPE},					/*TEXT_KGEN_TYPE*/
 		{SHORT_COARSE, CAT_KGEN, LONG_KGEN_KEY},			/*TEXT_KGEN_KEY*/
@@ -762,13 +754,6 @@ const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-0: sized by its entri
 		/*PAR_RAND_TARGET*/		DTYPE_MENU | (MENU_RND_TARGET<<8),
 		/*PAR_RAND_GO*/			DTYPE_MENU | (MENU_RND_ACT<<8),
 		/*PAR_RAND_UNDO*/		DTYPE_MENU | (MENU_RND_ACT<<8),
-		/*PAR_MORPH_VOICE*/		DTYPE_MENU | (MENU_MORPH_VOICE<<8),	// MODIFIED
-		/*PAR_MORPH_SOURCE*/	DTYPE_0B127,						// MODIFIED: morph chain
-		/*PAR_MORPH_AUTO*/		DTYPE_ON_OFF,
-		/*PAR_MORPH_LO*/		DTYPE_0B127,
-		/*PAR_MORPH_HI*/		DTYPE_0B127,
-		/*PAR_MORPH_SRC_CV*/	DTYPE_MENU | (MENU_MORPH_CV<<8),
-		/*PAR_MORPH_TGT_CV*/	DTYPE_MENU | (MENU_MORPH_CV<<8),
 		/*PAR_CPU_LOAD*/		DTYPE_0B255,	// RXl-0: display only
 		/*PAR_KGEN_TYPE*/		DTYPE_MENU | (MENU_KGEN_TYPE<<8),
 		/*PAR_KGEN_KEY*/		DTYPE_MENU | (MENU_KGEN_KEY<<8),
@@ -1989,7 +1974,7 @@ void menu_repaintGeneric()
 					memcpy(&editDisplayBuffer[1][13], "off", 3);
 				else
 #endif
-				if((parNr == PAR_MORPH_TARGET) || (parNr == PAR_MORPH_SOURCE) || (parNr == PAR_MORPH_LO) || (parNr == PAR_MORPH_HI))	// MODIFIED: + morph chain
+				if(parNr == PAR_MORPH_TARGET)
 				{
 					memcpy(&editDisplayBuffer[1][0], savefileNames[curParmVal][KIT_NAMES], 8);
 					numtostrpu(&editDisplayBuffer[1][13],(uint8_t)(curParmVal),' ');
@@ -3028,12 +3013,6 @@ static uint8_t getMaxEntriesForMenu(uint8_t menuId)
 	case MENU_RND_ACT:		// MODIFIED: randomizer
 		return rndActNames[0][0];
 
-	case MENU_MORPH_VOICE:	// MODIFIED: morph voice select
-		return morphVoiceNames[0][0];
-
-	case MENU_MORPH_CV:		// MODIFIED: morph chain
-		return morphCvNames[0][0];
-
 	case MENU_DIST:
 		return distNames[0][0];
 
@@ -3164,14 +3143,6 @@ static void getMenuItemNameForValue(const uint8_t menuId, const uint8_t curParmV
 
 	case MENU_RND_ACT:		// MODIFIED: randomizer
 		p=rndActNames[curParmVal+1];
-		break;
-
-	case MENU_MORPH_VOICE:	// MODIFIED: morph voice select
-		p=morphVoiceNames[curParmVal+1];
-		break;
-
-	case MENU_MORPH_CV:		// MODIFIED: morph chain
-		p=morphCvNames[curParmVal+1];
 		break;
 
 	case MENU_DIST:
@@ -4227,29 +4198,8 @@ void menu_parseGlobalParam(uint16_t paramNr, uint8_t value)
 		}
 		break;
 
-	// MODIFIED: morph voice changed: re-send the whole kit so voices that are no
-	// longer morphed go back to their own sound and the selected one morphs
-	case PAR_MORPH_VOICE:
-		preset_morph(preset_morphValue, 1);
-		break;
-
-
-	// midi mode is not used anymore
-	//case PAR_MIDI_MODE:
-	//	frontPanel_sendData(SEQ_CC,SEQ_MIDI_MODE,parameter_values[PAR_MIDI_MODE]);
-	//	break;
-
-	// MODIFIED: morph chain. Requested source/target kits only take effect on the silent
-	// side of the morph (glitch guard); preset_morph() applies them via morphChain_sync().
 	case PAR_MORPH_TARGET:
-	case PAR_MORPH_SOURCE:
-	case PAR_MORPH_AUTO:
-	case PAR_MORPH_LO:
-	case PAR_MORPH_HI:
-		if(morphChain_sync(preset_morphValue))
-		{
-			preset_morph(preset_morphValue, 1);
-		}
+		preset_morph(preset_morphValue, 1);
 		break;
 
 #if LXR0_MIDI
