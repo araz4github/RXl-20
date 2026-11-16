@@ -14,6 +14,7 @@
 #include "Preset/kitGen.h"		// RXl-0 (LXRE_MX): kit generator
 #include "Preset/kitGenUi.h"
 #include "fxRoute.h"				// RXl-0 (LXRE_MX): SHIFT+FX voice routing
+#include "drumStealer.h"	// RXl-0
 #include "lcd.h"
 #include <string.h>
 #include <stdlib.h>
@@ -2186,6 +2187,10 @@ void menu_repaint()
 	{
 		menu_repaintSimplePage();
 	}
+	else if(drumStealer_paint(editDisplayBuffer))
+	{
+		// RXl-0: Drum Stealer
+	}
 	else if(fxRoute_paint(editDisplayBuffer))
 	{
 		// RXl-0 (LXRE_MX): SHIFT+FX held, voices on FX A / FX B
@@ -3304,6 +3309,12 @@ void menu_parseEncoder(int8_t inc, uint8_t button)
 		return;
 	}
 #endif
+	if(drumStealer_isActive())	// RXl-0: the encoder browses the source kits, the click does nothing
+	{
+		lastEncoderButton = button;
+		drumStealer_encoder(inc);
+		return;
+	}
 	// handle the button being clicked or released
 	if(button != lastEncoderButton) { // was the button clicked?
 		btnClicked=button;
@@ -4833,6 +4844,7 @@ void menu_lxr0OpenLink(const uint8_t voice)
 //-----------------------------------------------------------------
 uint8_t menu_parseKnobValue(uint8_t potNr, int16_t diff)
 {
+	if(drumStealer_isActive()) return 0;	// RXl-0: pots do nothing in Drum Stealer
 	screensaver_touch();
 	preset_touchTimer(PRESET_KIT_TIMER);
 

@@ -14,6 +14,7 @@
 //#include "../config.h"
 #include <frontPanelParser_ui.h>
 #include "Preset/PresetManager.h"
+#include "drumStealer.h"	// RXl-0
 //#include "../Hardware/SD/ff.h"
 #include "../../Middlewares/Third_Party/FatFs/src/ff.h"
 #include <stdio.h>
@@ -352,6 +353,7 @@ void preset_processTimer()
 		}
 	}
 #endif
+	if(drumStealer_isActive()) return;	// RXl-0: no autosave of Drum Stealer auditions
 	if(preset_kitDirty == 1)
 	{
 		if(HAL_GetTick()-preset_kitTimer >= PRESET_SAVE_TIME )

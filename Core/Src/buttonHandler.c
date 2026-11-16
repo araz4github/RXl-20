@@ -30,11 +30,13 @@
 #include <Soundengine/TriggerProcessor.h>
 #include "Preset/kitGenUi.h"	// RXl-0 (LXRE_MX): kit generator
 #include "fxRoute.h"			// RXl-0 (LXRE_MX): SHIFT+FX voice routing
+#include "drumStealer.h"	// RXl-0
 #if LXR0_LINK
 #include "Soundengine/lxr0_voiceLink.h"
 #endif
 
 static uint8_t kgen_shiftPerfPending = 0;	// RXl-0: SHIFT+PERF pressed, kit generator toggles on release
+static uint8_t rxl0_heldVoices = 0;	//RXl-0: voice buttons held (bit n = voice n+1), for the Drum Stealer
 #if LXR0_RESTART
 static uint8_t lxr0_editHeld = 0;
 static uint8_t lxr0_perfHeld = 0;
@@ -2011,6 +2013,31 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 
 	screensaver_touch();
 
+#if EURORACK_MODULE
+	//RXl-0: Drum Stealer. Voice buttons held (for SHIFT + voice + DRUM), and while it is open
+	//it owns the buttons: SHIFT / PERF cancel, voices audition, held voice + DRUM copies
+	if((buttonNr >= BUT_2) && (buttonNr <= BUT_8)) rxl0_heldVoices |= (uint8_t)(1 << (buttonNr - BUT_2));
+	if(drumStealer_isActive())
+	{
+		switch(buttonNr)
+		{
+		case BUT_SHIFT:
+		case BUT_PERF:
+			drumStealer_cancel();
+			break;
+		case BUT_1:
+			drumStealer_drumPressed();
+			break;
+		case BUT_2: case BUT_3: case BUT_4: case BUT_5: case BUT_6: case BUT_7: case BUT_8:
+			drumStealer_voicePressed((uint8_t)(buttonNr - BUT_1));
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+#endif
+
 #if LXR0_RESTART
 	if(buttonNr == BUT_EDIT) lxr0_editHeld = 1;
 	if(buttonNr == BUT_PERF) lxr0_perfHeld = 1;
@@ -2050,6 +2077,16 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 
 
 	case BUT_1:
+
+		//RXl-0: SHIFT + one voice held + DRUM in voice edit mode opens the Drum Stealer
+		if(buttonHandler_getShiftButton() && (buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_VOICE)
+			&& (menu_activePage <= VOICE7_PAGE) && rxl0_heldVoices && !(rxl0_heldVoices & (rxl0_heldVoices - 1)))
+		{
+			uint8_t v = 0;
+			while(!(rxl0_heldVoices & (1 << v))) v++;
+			drumStealer_enter(v);
+			break;
+		}
 
 		//RXl-0 (LXRE_MX): kit generator page, DRUM = new kit (or only the held voices)
 		if(buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_KGEN)
@@ -2581,6 +2618,19 @@ void buttonHandler_buttonReleased(uint8_t buttonNr)
 #if LXR0_RESTART
 	if(buttonNr == BUT_EDIT) lxr0_editHeld = 0;
 	if(buttonNr == BUT_PERF) lxr0_perfHeld = 0;
+#endif
+#if EURORACK_MODULE
+	//RXl-0: Drum Stealer
+	if((buttonNr >= BUT_2) && (buttonNr <= BUT_8))
+	{
+		rxl0_heldVoices &= (uint8_t)~(1 << (buttonNr - BUT_2));
+		drumStealer_voiceReleased((uint8_t)(buttonNr - BUT_1));
+	}
+	if(drumStealer_isActive())
+	{
+		if(buttonNr == BUT_SHIFT) led_setValue(0, LED_SHIFT);
+		return;
+	}
 #endif
 
 	switch (buttonNr)

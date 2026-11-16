@@ -26,6 +26,7 @@
 #include "ledHandler.h"
 #include "buttonHandler.h"
 #include "Soundengine/lxr0_voiceLink.h"
+#include "drumStealer.h"	// RXl-0
 //#include "LCD_driver.h"
 
 uint8_t voiceStatus[NUM_DRUM_VOICES];
@@ -100,6 +101,7 @@ void voiceControl_start()
 // this fn assumes a valid voice is sent
 void voiceControl_noteOn(uint8_t voice, uint8_t note, uint8_t vel)
 {
+	if(drumStealer_blocks(voice)) return;	// RXl-0: Drum Stealer, only its auditions sound
 #if LXR0_LINK
 	if(lxr0Link_noteOn(voice, note, vel)) // lxr-0: a linked drum
 		return;

@@ -158,6 +158,23 @@ voice 7 settings.
   is played with the others, so the closed hat still chokes it when both arrive together.
 - (Golem already had LXRE_MX's mod-target fix.)
 
+## RXl-0's own: Drum Stealer
+Borrow one drum sound from another kit without leaving your kit.
+
+1. In voice edit mode (EDIT) hold **SHIFT**, hold the voice you want to replace, then press **DRUM**. The display
+   shows `STEAL->V3   k012` and the browsed kit's name.
+2. Turn the **encoder** to browse the stored kits 0–127 (the kit you have loaded comes first).
+3. The **blinking voice buttons** are the voices you can take from: 1–3 for voices 1–3, 4 for 4, 5 for 5, 6–7 for
+   6 and 7. Press one to hear its sound on your voice, through your kit's volume, pan and reverb send.
+4. **Hold a blinking voice and press DRUM** to keep that sound. Drum Stealer closes; save the kit as usual.
+5. **SHIFT** (a new press) or **PERF** leaves without changes.
+
+While it is open only your voice sounds: MIDI, trigger and CV inputs are ignored, the voice plays on St1, the pots
+do nothing and kit autosave waits. Copied: the OSC, AEG, MOD, FM, CLICK and FILTER pages, the sample and its trim,
+sample rate and drive. Kept from your kit: volume, pan, output, reverb send, voice 7 choke, the voice's LFO,
+velocity and CV modulation, glide/legato and voice links. Voices 6 and 7 share one sample trim, so taking a hat
+sound changes the trim for both hats.
+
 ## Navigation
 - **FX**, then press again to cycle: FX → **Reverb** → **Random** → FX.
 - **SHIFT + FX** (held) + voice buttons: send voices to the FX bus and back (RXl-0).
@@ -165,6 +182,7 @@ voice 7 settings.
   (OSC, AEG, MOD, FM, CLICK, FILTER, MIX) blinks. If both are the same LED, it blinks. While DRUM is held, the
   LEDs show the drum selection as before.
 - **SHIFT + PERF**: kit generator on / off (RXl-0).
+- **SHIFT + voice + DRUM** (voice edit mode, DRUM last): Drum Stealer (RXl-0).
 - Performance page (stock): **mrp** (morph), **mtg** (morph target), **sr** (sample rate).
 
 ## Your existing kits are safe

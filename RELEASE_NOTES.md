@@ -13,6 +13,11 @@ Unofficial: not made, approved or supported by Erica Synths or by the authors of
   CV read timing, accent latching and the open hi-hat trigger timing.
 - Not included: LXRE_MX's DJ filter.
 
+## New in RXl-0: Drum Stealer
+- SHIFT + voice + DRUM (voice edit mode) opens it. The encoder browses kits 0–127, the blinking voice buttons
+  audition compatible voices on your voice (your mix kept, played on St1, everything else silent), a held voice +
+  DRUM copies it, SHIFT or PERF cancels. See the README.
+
 ## Changed from Golem-RMX-0
 - RMX-0's "pan follows sounding notes" is removed: pan is read when a note starts, as in the stock firmware.
 - Golem's FX bus B is removed to leave processing time for the global reverb. Voices a kit sent to FX B play dry
