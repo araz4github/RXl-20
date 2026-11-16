@@ -1141,7 +1141,7 @@ static __attribute__((noinline)) void preset_dropFxBusB(uint8_t* p)	// kept out 
 	if(p[PAR_HH7_AUDIO_OUT] >= RXL0_OLD_FX_BUS_B) p[PAR_HH7_AUDIO_OUT] = out;
 	for(uint16_t i=PAR_FX2_TYPE; i<=PAR_FX2_P4; i++) p[i] = 0;
 }
-IN_ITCM_RAM void preset_sendDrumsetParametersImmediate()
+/*RXl-0: out of ITCM, not per sample*/ void preset_sendDrumsetParametersImmediate()
 {
 	uint8_t i;
 	preset_dropFxBusB(activeParameters);	// RXl-0

@@ -225,7 +225,8 @@ void HiHat_calcAsync( )
 	hh_calcAsync(&hatVoice2);
 }
 //---------------------------------------------------
-static void hh_calcSyncBlock(HiHatVoice* h, int16_t* buf, const uint8_t size)
+// RXl-0: back in ITCM (room made by moving parameter setters out); serves voices 6 and 7
+IN_ITCM_RAM static void hh_calcSyncBlock(HiHatVoice* h, int16_t* buf, const uint8_t size)
 {
 	//2 buffers for the mod oscs
 	int16_t mod1[size],mod2[size];

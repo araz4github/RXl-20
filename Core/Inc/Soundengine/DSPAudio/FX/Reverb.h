@@ -77,6 +77,7 @@ typedef struct ReverbStruct
 #if LXR0_REVERB
 	TiltEq eqFbR;		// lxr-0: right output EQ
 	uint8_t stereo;		// lxr-0: 1 = separate right output taps (the reverb bus); 0 = mono, as before
+	uint8_t rateShift;	// RXl-0: 1 = runs at half the sample rate (the reverb bus), 0 = full rate
 #endif
 
 } Reverb;
@@ -87,6 +88,9 @@ void Reverb_setDelayTime(Reverb *r, float t);
 void Reverb_setFeedback(Reverb *r, float fb);
 void Reverb_setVariation(Reverb *r, float v);
 void Reverb_setComposition(Reverb *r, float c);
+#if LXR0_REVERB
+void Reverb_setHalfRate(Reverb *r);	// RXl-0: call after Reverb_init, before the first block
+#endif
 
 
 /*

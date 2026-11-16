@@ -78,9 +78,11 @@ Details for each feature are in the [RMX-0 docs](https://github.com/mechanical-d
 - Each voice's **Mix** page has a `rev` send. *Golem-RMX-0: voice 7 has its own send on its Mix page (RMX-0's hats
   share one).* Kits without that setting give voice 7 the same send as voice 6.
 - *Golem-RMX-0:* the reverb page is on the FX button cycle: **pre** pre-delay, **dec** decay, **ton** tone,
-  **ref** reflection; turn the encoder to its 2nd screen for **out** (output) and the return level. The Perform page
-  keeps Golem's morph controls, so the return level isn't on a Perform pot here.
+  **ref** reflection; turn the encoder to its 2nd screen for **out** (output) and the return level.
 - A load guard bypasses the reverb if the module runs out of processing time, and brings it back when there is room.
+- *RXl-0:* the reverb runs at half the sample rate (22 kHz inside, back to 44.1 kHz at its output), which halves its
+  processing time, and its inner loop no longer makes a function call per step. Decay times, pre-delay and the tone
+  control's corner stay as before; the tail has less top end above about 10 kHz. FX A's reverb is unchanged.
 
 ## What Golem brings
 ### G1. A second FX bus (FX B): removed in RXl-0
@@ -148,6 +150,8 @@ voice 7 settings.
 
 ### X4. CPU load
 - Global settings (SHIFT + LOAD/SAVE), page 1, 4th column: **cpu**, the audio engine's load in %.
+- RXl-0: the 16 KB fast instruction memory (ITCM) now holds the snare, cymbal and both hi-hat engines and the
+  reverb sends. Code that only runs when a setting changes (kit loading, envelope and FX setters) moved out.
 
 ### X5. Fixes from LXRE_MX
 - A voice filter could go silent until power-off with a bright input, high cutoff and resonance (now guarded).

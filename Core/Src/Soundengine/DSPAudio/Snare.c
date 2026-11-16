@@ -166,7 +166,7 @@ IN_ITCM_RAM void Snare_calcAsync()
 
 }
 //---------------------------------------------------
-void Snare_calcSyncBlock(int16_t* buf, const uint8_t size)
+IN_ITCM_RAM void Snare_calcSyncBlock(int16_t* buf, const uint8_t size)	// RXl-0: ITCM
 {
 	int16_t transBuf[size];
 	int16_t oscBuf[size];

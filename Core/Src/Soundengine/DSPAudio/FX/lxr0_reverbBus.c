@@ -27,6 +27,12 @@ static __fp16 verbBuffer[VERB_BUFFER_SIZE];	// .bss in SRAM1; FX_BUFFER (DTCM) s
 static Reverb verb;
 static int16_t sendSum[OUTPUT_DMA_SIZE*2];	// interleaved L/R, Reverb_process mixes them to mono
 static int16_t wet[OUTPUT_DMA_SIZE*2];
+// RXl-0: the reverb runs at half the sample rate (half the processing time)
+#define HALF_SIZE (OUTPUT_DMA_SIZE/2)
+static int16_t sendHalf[HALF_SIZE*2];	// interleaved L/R, both the same (the send is mono)
+static int16_t wetHalf[HALF_SIZE*2];
+static int16_t decimPrev;				// last input sample of the previous block
+static int16_t interpPrevL, interpPrevR;	// last output samples of the previous block
 static float sendGain[7]; // GOLEM-RMX-0: 7 voices (voice 7 = separate open hi-hat)
 static uint8_t lastSend7 = 0xff;
 static float amount;
@@ -73,6 +79,7 @@ void lxr0Verb_init(void)
 	verb.reverbBufferSram = verbBuffer;
 	verb.stereo = 1;
 	Reverb_init(&verb);
+	Reverb_setHalfRate(&verb);	// RXl-0
 	staggerLines();
 	budget = (uint32_t)(((uint64_t)SystemCoreClock * OUTPUT_DMA_SIZE) / 44100);
 	memset(lastParams, 0xff, sizeof(lastParams)); // apply every setting on the first block
@@ -117,7 +124,7 @@ void lxr0Verb_beginBlock(void)
 	memset(sendSum, 0, sizeof(sendSum));
 }
 
-void lxr0Verb_addSend(uint8_t voice, const int16_t* data)
+IN_ITCM_RAM void lxr0Verb_addSend(uint8_t voice, const int16_t* data)	// RXl-0: ITCM, 7 times a block
 {
 	const float g = sendGain[voice];
 	if(g <= 0.f || lxr0Verb_bypassed)
@@ -163,14 +170,45 @@ static void mixWet(int16_t* output, int16_t* output2)
 	}
 }
 
+// RXl-0: 44.1 kHz send -> 22.05 kHz, with a [1 2 1]/4 low pass against aliasing
+static void decimate(void)
+{
+	for(uint8_t j=0; j<HALF_SIZE; j++)
+	{
+		const int32_t a = sendSum[4*j];			// frame 2j (L; R is the same)
+		const int32_t b = sendSum[4*j + 2];		// frame 2j+1
+		const int16_t s = (int16_t)((decimPrev + 2*a + b) >> 2);
+		decimPrev = (int16_t)b;
+		sendHalf[2*j] = sendHalf[2*j + 1] = s;
+	}
+}
+
+// RXl-0: 22.05 kHz wet -> 44.1 kHz, linear interpolation
+static void interpolate(void)
+{
+	for(uint8_t j=0; j<HALF_SIZE; j++)
+	{
+		const int16_t l = wetHalf[2*j];
+		const int16_t r = wetHalf[2*j + 1];
+		wet[4*j]     = (int16_t)((interpPrevL + l) >> 1);
+		wet[4*j + 1] = (int16_t)((interpPrevR + r) >> 1);
+		wet[4*j + 2] = l;
+		wet[4*j + 3] = r;
+		interpPrevL = l;
+		interpPrevR = r;
+	}
+}
+
 void lxr0Verb_endBlock(int16_t* output, int16_t* output2)
 {
 	uint32_t verbCycles = 0;
 	if(!lxr0Verb_bypassed && amount > 0.f)
 	{
 		const uint32_t t0 = DWT->CYCCNT;
-		memset(wet, 0, sizeof(wet));
-		Reverb_process(&verb, sendSum, wet, &wet[1], OUTPUT_DMA_SIZE, 2, 1.f); // all wet
+		decimate();
+		memset(wetHalf, 0, sizeof(wetHalf));
+		Reverb_process(&verb, sendHalf, wetHalf, &wetHalf[1], HALF_SIZE, 2, 1.f); // all wet, half rate
+		interpolate();
 		mixWet(output, output2);
 		verbCycles = DWT->CYCCNT - t0;
 	}
@@ -201,6 +239,7 @@ void lxr0Verb_endBlock(int16_t* output, int16_t* output2)
 		if(++onCount >= ON_BLOCKS)
 		{
 			memset(verbBuffer, 0, sizeof(verbBuffer)); // don't replay the old tail
+			decimPrev = interpPrevL = interpPrevR = 0;
 			lxr0Verb_bypassed = 0;
 		}
 	}

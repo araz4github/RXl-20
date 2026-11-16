@@ -24,6 +24,9 @@ Unofficial: not made, approved or supported by Erica Synths or by the authors of
   on FX B's output; the FX page cycle is FX → Reverb → Random.
 - Voice edit mode: the edited drum's LED is lit (its triggers flash it off) and the open sub-page LED blinks.
 - Voice 7's sound engine sits in fast DTCM memory like voices 1–6.
+- CPU: the global reverb runs at half the sample rate with a faster inner loop (about half its cost or less; slightly
+  less top end in the tail, decay and tone as before). The snare, cymbal and hi-hat engines and the reverb sends
+  run from fast ITCM memory; setters that only run when a setting changes moved out to make room.
 - A plain FX press cycles the FX pages (as before). SHIFT + FX is now the voice routing shortcut.
 - The Performance page is the stock one again (morph, morph target, sample rate). Golem's per-voice morph,
   morph chain (source kit, auto-advance, kit range) and the CV kit selection on global settings sub-page 2 are

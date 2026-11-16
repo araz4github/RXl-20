@@ -47,6 +47,9 @@ void Reverb_init(Reverb *r)
 
 		//feedbackShaper.setShape(0.7f);
 	r->lastOut = r->lastOut2 = 0;
+#if LXR0_REVERB
+	r->rateShift = 0;	// RXl-0: full rate unless Reverb_setHalfRate is called
+#endif
 	SineCosine_setFreq(&r->lfo, 1.31f);
 	/*
 	AllpassDelay apDelay[2];
@@ -204,8 +207,188 @@ void Reverb_init(Reverb *r)
 
 }
 
+#define RV_FAST (LXR0_REVERB && !SPIN_SEMI && !HIGH_RES_SINE_COS && !USE_OUT_2)
+#if RV_FAST
+//----------------------------------------------------------------------------
+// RXl-0: the same reverb, with the delay line, allpass, one-pole and tilt EQ steps
+// written inline (the VerbTools functions sit in other files, so every sample made
+// ~30 function calls). Same math in the same order.
+//----------------------------------------------------------------------------
+#define RV_INLINE static inline __attribute__((always_inline))
+#define RV_MASK (MAX_ALLPASS_SIZE - 1)
 
+RV_INLINE float rv_read(VerbDelay* d)
+{
+	const float v = (float)d->ramBuffer[d->readPtr];
+	d->readPtr = (d->readPtr + 1) & RV_MASK;
+	return v;
+}
+RV_INLINE void rv_write(VerbDelay* d, float in)
+{
+	d->ramBuffer[d->writePtr] = (__fp16)in;
+	d->writePtr = (d->writePtr + 1) & RV_MASK;
+}
+RV_INLINE float rv_delay(VerbDelay* d, float in)		// VerbDelay_process
+{
+	rv_write(d, in);
+	return rv_read(d);
+}
+RV_INLINE float rv_tap(const VerbDelay* d, uint16_t off)	// VerbDelay_ReadTapSample
+{
+	uint16_t r1 = d->readPtr;
+	r1 = (r1 - off) & RV_MASK;
+	return (float)d->ramBuffer[r1];
+}
+RV_INLINE float rv_onePole(OnePoleFilter* f, double input)	// calcOnePole
+{
+	f->b = fmaf(f->r, input - f->b, f->b);
+	return f->b;
+}
+RV_INLINE float rv_tilt(TiltEq* eq, float in)		// TiltEq_process
+{
+	eq->lp_out = eq->a0*in + eq->b1*eq->lp_out;
+	return eq->lgain*eq->lp_out + eq->hgain*(in - eq->lp_out);
+}
+RV_INLINE float rv_allpass(AllpassDelay* a, float input)	// AllpassDelay_process
+{
+	a->out = rv_read(&a->delay);
+	a->in = input + a->g*a->out;
+	rv_write(&a->delay, a->in);
+	return a->out + (-a->g * a->in);
+}
+RV_INLINE float rv_allpassMod(AllpassModDelay* a, float input)	// AllpassModDelay_process
+{
+	VerbModDelay* d = &a->delay;
+	// VerbModDelay_calcLength
+	const float scaledSize = d->length*d->roomSz;
+	const float filteredPos = rv_onePole(&d->lp, scaledSize + d->depth*(d->modVal));
+	float pos = d->writePtr - filteredPos;
+	if(pos < 0) pos += MAX_DELAY_SIZE;
+	const uint32_t itg = pos;
+	d->frac = pos - itg;
+	d->readPtr = itg & (MAX_DELAY_SIZE - 1);
+	// read, write
+	a->out = (float)d->ramBuffer[d->readPtr];
+	d->readPtr = (d->readPtr + 1) & (MAX_DELAY_SIZE - 1);
+	a->in = input + a->g*a->out;
+	d->ramBuffer[d->writePtr] = (__fp16)a->in;
+	d->writePtr = (d->writePtr + 1) & (MAX_DELAY_SIZE - 1);
+	return a->out + (-a->g * a->in);
+}
 
+void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, uint16_t size,  uint8_t channels, float dryWet)
+{
+	(void)outR;
+	(void)channels;
+	int32_t* stereoOut = (int32_t*)outL;
+
+	SineCosine_calc(&r->lfo);
+	VerbModDelay_setModValue(&r->apModDelay[1].delay, SineCosine_getSine(&r->lfo));
+	VerbModDelay_setModValue(&r->apModDelay[0].delay, SineCosine_getCosine(&r->lfo));
+
+	// early reflection taps: a percentage of the line, as VerbDelay_ReadTap, fixed for the block
+	VerbDelay* er = &r->earlyReflectionDelay;
+	const uint16_t e0 = earlyTaps[0]/100.f * er->length;
+	const uint16_t e1 = earlyTaps[1]/100.f * er->length;
+	const uint16_t e2 = earlyTaps[2]/100.f * er->length;
+	const uint16_t e3 = earlyTaps[3]/100.f * er->length;
+
+	// output taps in samples; at half rate the lines are half as long
+	const uint8_t sh = r->rateShift;
+	const uint16_t l0 = 266>>sh, l1 = 1913>>sh, l2 = 996>>sh, l3 = 187>>sh, l4 = 1066>>sh;
+	const uint16_t q0 = 353>>sh, q1 = 1228>>sh, q2 = 1673>>sh, q3 = 1111>>sh, q4 = 335>>sh, q5 = 121>>sh;
+
+	const float fb = r->feedback;
+	const float ev = r->earlyVolume;
+
+	for(uint16_t i=0; i<size; i++)
+	{
+		const uint16_t idx1 = i*2;
+		const uint16_t idx2 = i*2+1;
+		const int16_t mix = (__QADD16(fxBuffer[idx1]/2, fxBuffer[idx2]/2));
+		float monoInput = mix/32768.f;
+
+		monoInput = rv_delay(&r->preDelay, monoInput);
+
+		rv_delay(er, monoInput);
+		float early = rv_tap(er, e0);
+		early += rv_tap(er, e1) * 0.5f;
+		early += rv_tap(er, e2) * 0.125f;
+		early += rv_tap(er, e3) * 0.25f;
+
+		monoInput = 0.5f * rv_tilt(&r->eq, monoInput);
+
+		const float in  = rv_allpass(&r->inputAllpass[0], rv_allpass(&r->inputAllpass[1], monoInput));
+		const float in2 = rv_allpass(&r->inputAllpass[2], rv_allpass(&r->inputAllpass[3], monoInput));
+
+		float tmp = rv_allpassMod(&r->apModDelay[0], in + r->lastOut2);
+		tmp = rv_delay(&r->delay[0], tmp);
+		tmp *= fb;
+		tmp = rv_allpass(&r->apDelay[0], tmp);
+		tmp = rv_delay(&r->delay[1], tmp);
+		r->lastOut = rv_onePole(&r->lpFeedback, tmp*fb);
+
+		tmp = rv_allpassMod(&r->apModDelay[1], in2 + r->lastOut);
+		tmp = rv_delay(&r->delay[2], tmp);
+		tmp *= fb;
+		tmp = rv_allpass(&r->apDelay[1], tmp);
+		tmp = rv_delay(&r->delay[3], tmp);
+		r->lastOut2 = tmp * fb;
+
+		float out2  = rv_tap(&r->delay[2], l0) * 0.6f;
+		out2 -= rv_tap(&r->apDelay[1].delay, l1) * 0.6f;
+		out2 += rv_tap(&r->delay[3], l2) * 0.6f;
+		out2 -= rv_tap(&r->apDelay[0].delay, l3) * 0.6f;
+		out2 -= rv_tap(&r->delay[1], l4) * 0.6f;
+		const float out = rv_tilt(&r->eqFb, fmaf(early, ev, out2));
+
+		float outRight = out;
+		if(r->stereo)
+		{
+			float o  = rv_tap(&r->delay[0], q0) * 0.6f;
+			o -= rv_tap(&r->apDelay[0].delay, q1) * 0.6f;
+			o += rv_tap(&r->delay[1], q2) * 0.6f;
+			o -= rv_tap(&r->delay[2], q3) * 0.6f;
+			o -= rv_tap(&r->apDelay[1].delay, q4) * 0.6f;
+			o -= rv_tap(&r->delay[3], q5) * 0.6f;
+			outRight = rv_tilt(&r->eqFbR, fmaf(early, ev, o));
+		}
+
+		const int16_t wet  = __SSAT(out*32768, 16);
+		const int16_t wetR = __SSAT(outRight*32768, 16);
+		const int32_t x = __PKHBT(fxBuffer[idx1] + __SSAT((wet - fxBuffer[idx1]) * dryWet,16), fxBuffer[idx2] + __SSAT((wetR - fxBuffer[idx2]) * dryWet,16), 16);
+		*stereoOut = __QADD16(*stereoOut, x);
+		stereoOut++;
+	}
+}
+
+//----------------------------------------------------------------------------
+// RXl-0: run at half the sample rate (the reverb bus decimates its input and
+// interpolates the output). Lines are half as long so times stay the same; the
+// tilt EQ and the feedback low pass are set for the lower rate in their setters.
+void Reverb_setHalfRate(Reverb *r)
+{
+	r->rateShift = 1;
+	VerbDelay_setLength(&r->earlyReflectionDelay, 2000/2);
+	VerbDelay_setLength(&r->preDelay, 2031/2);
+	AllpassDelay_setDelay(&r->inputAllpass[0], 142/2);
+	AllpassDelay_setDelay(&r->inputAllpass[1], 107/2);
+	AllpassDelay_setDelay(&r->inputAllpass[2], 379/2);
+	AllpassDelay_setDelay(&r->inputAllpass[3], 277/2);
+	VerbDelay_setLength(&r->delay[0], 2047/2);
+	VerbDelay_setLength(&r->delay[1], 1913/2);
+	VerbDelay_setLength(&r->delay[2], 1720/2);
+	VerbDelay_setLength(&r->delay[3], 1163/2);
+	AllpassDelay_setDelay(&r->apDelay[0], 1800/2);
+	AllpassDelay_setDelay(&r->apDelay[1], 2039/2);
+	AllpassModDelay_setDelay(&r->apModDelay[0], 672/2);
+	AllpassModDelay_setDelay(&r->apModDelay[1], 908/2);
+	// 400 Hz tilt corner: twice the frequency in samples at half the rate
+	TiltEq_setFreq(&r->eq, 800);
+	TiltEq_setFreq(&r->eqFb, 800);
+	TiltEq_setFreq(&r->eqFbR, 800);
+}
+#else
 
 //void Reverb_process(Reverb *r, int16_t* input1, int16_t* input2)
 void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, uint16_t size,  uint8_t channels, float dryWet)
@@ -480,7 +663,8 @@ void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, u
 			stereoOut++;
 	}
 }
-IN_ITCM_RAM void Reverb_setDelayTime(Reverb *r, float t)
+#endif // RV_FAST
+/*RXl-0: out of ITCM, not per sample*/ void Reverb_setDelayTime(Reverb *r, float t)
 {
 #if SPIN_SEMI
 	if(r->delayTime != t)
@@ -508,12 +692,12 @@ IN_ITCM_RAM void Reverb_setDelayTime(Reverb *r, float t)
 #endif
 }
 
-IN_ITCM_RAM void Reverb_setFeedback(Reverb *r, float fb)
+/*RXl-0: out of ITCM, not per sample*/ void Reverb_setFeedback(Reverb *r, float fb)
 {
 	r->feedback = fb;//feedbackShaper.shape(fb);
 }
 
-IN_ITCM_RAM void Reverb_setComposition(Reverb *r, float c)
+/*RXl-0: out of ITCM, not per sample*/ void Reverb_setComposition(Reverb *r, float c)
 {
 	TiltEq_setParameter(&r->eq, -1+2*c);
 	TiltEq_setParameter(&r->eqFb, -1+2*c);
@@ -521,11 +705,15 @@ IN_ITCM_RAM void Reverb_setComposition(Reverb *r, float c)
 	TiltEq_setParameter(&r->eqFbR, -1+2*c);
 #endif
 	//compositionParameter = c;
+#if LXR0_REVERB
+	// RXl-0: at half rate one step has to do two steps' work: 1-(1-c)^2
+	if(r->rateShift) c = 1.f - (1.f - c)*(1.f - c);
+#endif
 	setOnePoleCoef(&r->lpFeedback, c);
 //	setOnePoleCoef(&r->lpImpulse, c);
 }
 
-IN_ITCM_RAM void Reverb_setVariation(Reverb *r, float v)
+/*RXl-0: out of ITCM, not per sample*/ void Reverb_setVariation(Reverb *r, float v)
 {
 #if SPIN_SEMI
 	//variationParameter = v;

@@ -177,21 +177,21 @@ void Distortion_init(MasterDistortion *dist)
 	dist->lp3_state[1] = 0.0;
 }
 
-IN_ITCM_RAM void Distortion_setDrive(MasterDistortion *dist,float d)
+/*RXl-0: out of ITCM, not per sample*/ void Distortion_setDrive(MasterDistortion *dist,float d)
 {
 	dist->drive = d;
 }
-IN_ITCM_RAM void Distortion_setParam1(MasterDistortion *dist,float p)
+/*RXl-0: out of ITCM, not per sample*/ void Distortion_setParam1(MasterDistortion *dist,float p)
 {
 	dist->p1 = p;
 }
 
-IN_ITCM_RAM void Distortion_setParam2(MasterDistortion *dist,float p)
+/*RXl-0: out of ITCM, not per sample*/ void Distortion_setParam2(MasterDistortion *dist,float p)
 {
 	dist->p2 = p;
 }
 
-IN_ITCM_RAM void Distortion_setParam3(MasterDistortion *dist,float p)
+/*RXl-0: out of ITCM, not per sample*/ void Distortion_setParam3(MasterDistortion *dist,float p)
 {
 	dist->p3 = p;
 }
