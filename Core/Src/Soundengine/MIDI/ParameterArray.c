@@ -40,7 +40,7 @@ Parameter parameterArray[PAR_ACTIVE_STEP];
 
 //the parameter numbers from the AVR/Frontpanel
 //####################################################################
- /*RXl-0: out of ITCM, not per sample*/ void paramArray_setParameter(uint16_t idx, ptrValue newValue)
+ /*RXl-20: out of ITCM, not per sample*/ void paramArray_setParameter(uint16_t idx, ptrValue newValue)
 {
 
 #if 1

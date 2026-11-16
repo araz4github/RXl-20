@@ -22,7 +22,7 @@
 #include "Preset/PresetManager.h"
 #include "Soundengine/Soundengine.h"
 #include "Soundengine/DSPAudio/random.h"
-#include "Preset/kitGenUi.h"	// RXl-0 (LXRE_MX)
+#include "Preset/kitGenUi.h"	// RXl-20 (LXRE_MX)
 #include <Soundengine/ModMatrix_Processor.h>
 #include "Soundengine/MIDI/Uart.h"
 
@@ -245,8 +245,8 @@ lcd_clear();
 #if LXR0_SAMPLES
 menu_setNumSamples(lxr0Samples_init());	// RMX-0: sample library
 #endif
-// RXl-0: the start-up screen marks the firmware as modified, as required by NOTICE.md
-lcd_string("RXl-0 v");
+// RXl-20: the start-up screen marks the firmware as modified, as required by NOTICE.md
+lcd_string("RXl-20 v");
 lcd_string(FIRMWARE_VERSION);
 //goto 2nd line
 lcd_setcursor(0,2);
@@ -490,8 +490,8 @@ voiceControl_start();
 	  soundengine_process();
 	//  menu_tick();
 	  led_tickHandler();
-	  KitGenUi_tick();		// RXl-0 (LXRE_MX): kit generator LEDs / recipe view
-	  menu_updateCpuLoad();	// RXl-0 (LXRE_MX)
+	  KitGenUi_tick();		// RXl-20 (LXRE_MX): kit generator LEDs / recipe view
+	  menu_updateCpuLoad();	// RXl-20 (LXRE_MX)
 #if LXR0_LINK
 	  buttonHandler_lxr0LinkTick();
 #endif

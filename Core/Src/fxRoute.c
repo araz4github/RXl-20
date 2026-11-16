@@ -6,7 +6,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA). Each press toggles a voice between its own
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA). Each press toggles a voice between its own
  * output and the FX bus; voice 7 (Golem's open hi-hat) routes its own output.
  *
  * This file is part of the LXR firmware. It is licensed under the GNU General

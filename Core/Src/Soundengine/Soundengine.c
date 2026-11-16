@@ -18,7 +18,7 @@
 //#include "Soundengine/USB/usb_manager.h"
 #include "Soundengine/MIDI/Uart.h"
 
-// RXl-0 (from LXRE_MX): CPU meter. Cycles of one block vs. the time one block plays (DWT cycle
+// RXl-20 (from LXRE_MX): CPU meter. Cycles of one block vs. the time one block plays (DWT cycle
 // counter, enabled by DWT_Delay_Init in main). Time spent in higher priority interrupts during
 // the block counts as load too - it is time the block lacks.
 volatile float soundengine_cpuLoad = 0;

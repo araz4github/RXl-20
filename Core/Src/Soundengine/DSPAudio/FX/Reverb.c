@@ -48,7 +48,7 @@ void Reverb_init(Reverb *r)
 		//feedbackShaper.setShape(0.7f);
 	r->lastOut = r->lastOut2 = 0;
 #if LXR0_REVERB
-	r->rateShift = 0;	// RXl-0: full rate unless Reverb_setHalfRate is called
+	r->rateShift = 0;	// RXl-20: full rate unless Reverb_setHalfRate is called
 #endif
 	SineCosine_setFreq(&r->lfo, 1.31f);
 	/*
@@ -210,7 +210,7 @@ void Reverb_init(Reverb *r)
 #define RV_FAST (LXR0_REVERB && !SPIN_SEMI && !HIGH_RES_SINE_COS && !USE_OUT_2)
 #if RV_FAST
 //----------------------------------------------------------------------------
-// RXl-0: the same reverb, with the delay line, allpass, one-pole and tilt EQ steps
+// RXl-20: the same reverb, with the delay line, allpass, one-pole and tilt EQ steps
 // written inline (the VerbTools functions sit in other files, so every sample made
 // ~30 function calls). Same math in the same order.
 //----------------------------------------------------------------------------
@@ -363,7 +363,7 @@ void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, u
 }
 
 //----------------------------------------------------------------------------
-// RXl-0: run at half the sample rate (the reverb bus decimates its input and
+// RXl-20: run at half the sample rate (the reverb bus decimates its input and
 // interpolates the output). Lines are half as long so times stay the same; the
 // tilt EQ and the feedback low pass are set for the lower rate in their setters.
 void Reverb_setHalfRate(Reverb *r)
@@ -664,7 +664,7 @@ void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, u
 	}
 }
 #endif // RV_FAST
-/*RXl-0: out of ITCM, not per sample*/ void Reverb_setDelayTime(Reverb *r, float t)
+/*RXl-20: out of ITCM, not per sample*/ void Reverb_setDelayTime(Reverb *r, float t)
 {
 #if SPIN_SEMI
 	if(r->delayTime != t)
@@ -692,12 +692,12 @@ void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, u
 #endif
 }
 
-/*RXl-0: out of ITCM, not per sample*/ void Reverb_setFeedback(Reverb *r, float fb)
+/*RXl-20: out of ITCM, not per sample*/ void Reverb_setFeedback(Reverb *r, float fb)
 {
 	r->feedback = fb;//feedbackShaper.shape(fb);
 }
 
-/*RXl-0: out of ITCM, not per sample*/ void Reverb_setComposition(Reverb *r, float c)
+/*RXl-20: out of ITCM, not per sample*/ void Reverb_setComposition(Reverb *r, float c)
 {
 	TiltEq_setParameter(&r->eq, -1+2*c);
 	TiltEq_setParameter(&r->eqFb, -1+2*c);
@@ -706,14 +706,14 @@ void Reverb_process(Reverb *r, int16_t *fxBuffer,int16_t* outL, int16_t* outR, u
 #endif
 	//compositionParameter = c;
 #if LXR0_REVERB
-	// RXl-0: at half rate one step has to do two steps' work: 1-(1-c)^2
+	// RXl-20: at half rate one step has to do two steps' work: 1-(1-c)^2
 	if(r->rateShift) c = 1.f - (1.f - c)*(1.f - c);
 #endif
 	setOnePoleCoef(&r->lpFeedback, c);
 //	setOnePoleCoef(&r->lpImpulse, c);
 }
 
-/*RXl-0: out of ITCM, not per sample*/ void Reverb_setVariation(Reverb *r, float v)
+/*RXl-20: out of ITCM, not per sample*/ void Reverb_setVariation(Reverb *r, float v)
 {
 #if SPIN_SEMI
 	//variationParameter = v;

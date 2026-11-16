@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------
 //#define NUM_PAGES 12		
 #define NUM_SUB_PAGES 8	// a maximum of 8 subpages 
-// RXl-0: subpage 6 (Golem's FX bus B) is unused - FX bus B is removed
+// RXl-20: subpage 6 (Golem's FX bus B) is unused - FX bus B is removed
 // MODIFIED: FX page subpage with the parameter randomizer
 #define RANDOM_SUBPAGE 7
 #define MASK_PARAMETER 0x07
@@ -100,7 +100,7 @@ enum PageNames
 	PATTERN_SETTINGS_PAGE,
 	RECORDING_PAGE,
 	FX_MODE_PAGE,
-	KGEN_PAGE,		// RXl-0 (LXRE_MX): kit generator (SHIFT+PERF)
+	KGEN_PAGE,		// RXl-20 (LXRE_MX): kit generator (SHIFT+PERF)
 
 
 
@@ -332,8 +332,8 @@ enum NamesEnum
 	TEXT_RND_GO,
 	TEXT_RND_UNDO,
 
-	TEXT_CPU_LOAD,		// RXl-0 (LXRE_MX): CONFIG, read only
-	TEXT_KGEN_TYPE,		// RXl-0 (LXRE_MX): kit generator page
+	TEXT_CPU_LOAD,		// RXl-20 (LXRE_MX): CONFIG, read only
+	TEXT_KGEN_TYPE,		// RXl-20 (LXRE_MX): kit generator page
 	TEXT_KGEN_KEY,
 	TEXT_KGEN_MOD,
 	TEXT_KGEN_HZ,
@@ -487,8 +487,8 @@ enum shortNamesEnum
 	SHORT_LXR0_LINK_GLIDE_TYPE,
 	SHORT_LXR0_LINK_LEGATO,
 #endif
-	SHORT_CPU,		// RXl-0 (LXRE_MX)
-	SHORT_HZ,		// RXl-0 (LXRE_MX): kit generator
+	SHORT_CPU,		// RXl-20 (LXRE_MX)
+	SHORT_HZ,		// RXl-20 (LXRE_MX): kit generator
 
 	
 };
@@ -546,7 +546,7 @@ enum catNamesEnum
 	CAT_LXR0_LINK,
 	CAT_LXR0_GLIDE, // glide and legato: per drum, not part of the link
 #endif
-	CAT_KGEN,		// RXl-0 (LXRE_MX): kit generator
+	CAT_KGEN,		// RXl-20 (LXRE_MX): kit generator
 };
 //-----------------------------------------------------------------
 // these must correspond with longNames in MenuText.h
@@ -668,8 +668,8 @@ enum longNamesEnum
 	LONG_LXR0_LINK_GLIDE_TYPE,
 	LONG_LXR0_LINK_LEGATO,
 #endif
-	LONG_CPU_LOAD,	// RXl-0 (LXRE_MX)
-	LONG_KGEN_KEY,	// RXl-0 (LXRE_MX): kit generator
+	LONG_CPU_LOAD,	// RXl-20 (LXRE_MX)
+	LONG_KGEN_KEY,	// RXl-20 (LXRE_MX): kit generator
 	LONG_KGEN_LFO,
 	LONG_KGEN_HZ,
 	
@@ -849,9 +849,9 @@ uint8_t menu_lxr0RestartIsOpen(void);
 void menu_switchPage(uint8_t pageNr);
 //-----------------------------------------------------------------
 void menu_switchSubPage(uint8_t subPageNr, uint8_t toggle);
-// RXl-0 (LXRE_MX): CONFIG page CPU load, called from the main loop
+// RXl-20 (LXRE_MX): CONFIG page CPU load, called from the main loop
 void menu_updateCpuLoad();
-// RXl-0 (LXRE_MX): kit generator page (one screen: TYP COA MOD Hz)
+// RXl-20 (LXRE_MX): kit generator page (one screen: TYP COA MOD Hz)
 void menu_enterKitGenPage();
 //-----------------------------------------------------------------
 void menu_resetActiveParameter();

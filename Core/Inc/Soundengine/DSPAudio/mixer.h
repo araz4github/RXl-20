@@ -39,7 +39,7 @@ enum
 	MIXER_ROUTING_DAC2_L,
 	MIXER_ROUTING_DAC2_R,
 	MIXER_ROUTING_FX_BUS,
-	// RXl-0: Golem's FX bus B (7) is removed; kits that used it are mapped in preset_dropFxBusB()
+	// RXl-20: Golem's FX bus B (7) is removed; kits that used it are mapped in preset_dropFxBusB()
 };
 
 void mixer_init();

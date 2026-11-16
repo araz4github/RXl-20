@@ -10,7 +10,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
  * (Golem's parameter randomizer is menu/randomizer.c) and extended to Golem's voice 7.
  */
 #define RND_LOUD_NF 33
@@ -90,5 +90,5 @@ static const int8_t rndLoudIdx[7][RND_A_COUNT] = {
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,38,39,40,-1,-1,-1,41,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,42,-1,43,44,-1,-1,-1,45,46,-1,-1},
 	{-1,-1,-1,-1,-1,-1,-1,47,-1,-1,48,49,-1,50,51,52,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,53,-1,-1,-1,54,55,-1,-1,-1,56,-1,-1},
 	{-1,-1,-1,-1,-1,-1,-1,57,-1,-1,-1,58,59,60,61,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,-1,63,64,-1,65,-1,-1},
-	{-1,-1,-1,-1,-1,-1,-1,57,-1,-1,-1,58,59,60,61,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,-1,63,64,-1,65,-1,-1},	// RXl-0: voice 7 (open hi-hat) uses voice 6's models
+	{-1,-1,-1,-1,-1,-1,-1,57,-1,-1,-1,58,59,60,61,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,-1,63,64,-1,65,-1,-1},	// RXl-20: voice 7 (open hi-hat) uses voice 6's models
 };

@@ -45,14 +45,14 @@
 #define MENU_CV_SRC			26
 #define MENU_CV_SAVE		27
 #define MENU_AUDIO_OUT_FX	28
-// 29: was Golem's FX bus B types (RXl-0: removed)
+// 29: was Golem's FX bus B types (RXl-20: removed)
 #define MENU_RND_TARGET		30	// MODIFIED: randomizer target
 #define MENU_RND_ACT		31	// MODIFIED: randomizer go / undo
-// 32, 33: were Golem's morph voice / morph CV menus (removed in RXl-0)
+// 32, 33: were Golem's morph voice / morph CV menus (removed in RXl-20)
 #define MENU_LXR0_LINK_MODE		34 // lxr-0
 #define MENU_LXR0_LINK_ALLOC	35 // lxr-0
 #define MENU_LXR0_GLIDE_TYPE	36 // lxr-0
-#define MENU_KGEN_TYPE		37 // RXl-0 (LXRE_MX): kit generator
+#define MENU_KGEN_TYPE		37 // RXl-20 (LXRE_MX): kit generator
 #define MENU_KGEN_KEY		38
 #define MENU_KGEN_HZ		39
 // GOLEM-RMX-0: RMX-0 menu ids renumbered after Golem's (29-33)
@@ -434,7 +434,7 @@ const char outputNamesFx[][7]  =
 //-----------------------------------------------------------------
 const char outputNames[][7]  =
 {
-	{7},		//number of entries (RXl-0: FX bus B removed)
+	{7},		//number of entries (RXl-20: FX bus B removed)
 	{"St1"}	,	//Stereo Out DAC 1
 	{"St2"}	,	//Stereo Out DAC 2
 	{"L1"}	,	//Mono Out Left DAC 1
@@ -633,8 +633,8 @@ const char shortNames[][4]  =
 	{"typ"},
 	{"lgt"},
 #endif
-	{"cpu"},	// RXl-0: SHORT_CPU
-	{"hz"},		// RXl-0: SHORT_HZ
+	{"cpu"},	// RXl-20: SHORT_CPU
+	{"hz"},		// RXl-20: SHORT_HZ
 
 };
 //-----------------------------------------------------------------
@@ -692,7 +692,7 @@ const char catNames[][16] =
 	{"Link"},
 	{"Glide"},
 #endif
-	{"Kit Gen"},	// RXl-0: CAT_KGEN
+	{"Kit Gen"},	// RXl-20: CAT_KGEN
 };
 //-----------------------------------------------------------------
 // these must correspond to longNamesEnum
@@ -815,15 +815,15 @@ const char longNames[][16] =
 	{"Type"},
 	{"Legato"},
 #endif
-	{"CPU load"},	// RXl-0: LONG_CPU_LOAD
-	{"Key"},		// RXl-0: LONG_KGEN_KEY
-	{"LFO Rout"},	// RXl-0: LONG_KGEN_LFO
-	{"Spectrum"},	// RXl-0: LONG_KGEN_HZ
+	{"CPU load"},	// RXl-20: LONG_CPU_LOAD
+	{"Key"},		// RXl-20: LONG_KGEN_KEY
+	{"LFO Rout"},	// RXl-20: LONG_KGEN_LFO
+	{"Spectrum"},	// RXl-20: LONG_KGEN_HZ
 };
 
 
 //-----------------------------------------------------------------
-// RXl-0 (from LXRE_MX): kit generator type (CLS/EXP/GLT), key (COA), spectral slotting (Hz)
+// RXl-20 (from LXRE_MX): kit generator type (CLS/EXP/GLT), key (COA), spectral slotting (Hz)
 const char kgenTypeNames[][4] =
 {
 	{3},		//number of entries

@@ -213,7 +213,7 @@ static inline void mixer_moveDataToOutput(uint8_t dest, const float panL, const 
 {
 	//check if a cable is in the selected out
 	dest = mixer_checkOutJackAvailable(dest);
-	// RXl-0: an unknown output (e.g. Golem's removed FX bus B) plays on stereo 1 instead of going silent
+	// RXl-20: an unknown output (e.g. Golem's removed FX bus B) plays on stereo 1 instead of going silent
 	if(dest > MIXER_ROUTING_FX_BUS) dest = MIXER_ROUTING_DAC1_STEREO;
 
 	uint8_t i;

@@ -1,9 +1,9 @@
-# RXl-0 (LXR firmware mod)
+# RXl-20 (LXR firmware mod)
 
-Unofficial custom firmware for the Erica Synths LXR Eurorack drum module. RXl-0 is **Golem-RMX-0 v1.0** (Golem +
+Unofficial custom firmware for the Erica Synths LXR Eurorack drum module. RXl-20 is **Golem-RMX-0 v1.0** (Golem +
 RMX-0) with parts of **LXRE_MX v1.1.1** ported in, all built on Erica Synths' open-source LXR firmware v1.51.
 
-What RXl-0 changes compared to Golem-RMX-0:
+What RXl-20 changes compared to Golem-RMX-0:
 
 - **From [LXRE_MX](https://github.com/RN01MA/lxr-eurorack-app) by Roman (RN01MA):** the kit generator (CLS / EXP /
   GLT), the SHIFT+FX voice routing shortcut, click-free kit morphing, a CPU load display and LXRE_MX's bug fixes.
@@ -17,14 +17,14 @@ Golem-RMX-0 itself combines two community firmwares:
 
 - **Golem** by Zach ([almogzach](https://github.com/almogzach)): a second FX bus, a fully separate open hi-hat
   (voice 7), a parameter randomizer, per-voice morph and a morph chain with CV kit selection (the last two are
-  not in RXl-0).
+  not in RXl-20).
 - **[RMX-0](https://github.com/mechanical-dance/RMX-0) by [mechanical-dance](https://github.com/mechanical-dance)**: new LFO shapes, click-free
   retriggers, a restart menu, MIDI input with voice links and glide, user samples
   and a global reverb.
 
-> **Unofficial, modified firmware.** RXl-0 is not official Erica Synths firmware and is not made, approved or
+> **Unofficial, modified firmware.** RXl-20 is not official Erica Synths firmware and is not made, approved or
 > supported by Erica Synths, or by the authors of Golem, RMX-0 or LXRE_MX. Install it at your own risk.
-> The start-up screen shows **`RXl-0 v1.0`** / **`LXR firmware mod`** so you can always tell it apart.
+> The start-up screen shows **`RXl-20 v1.0`** / **`LXR firmware mod`** so you can always tell it apart.
 
 ## Credits
 
@@ -51,7 +51,7 @@ Details for each feature are in the [RMX-0 docs](https://github.com/mechanical-d
   One-shots work as extra envelopes.
 - **Click-free retriggers:** retriggering a sounding voice fades the old note out over 3 ms. *Golem-RMX-0: also on
   voice 7.*
-- *RXl-0:* RMX-0's "pan follows sounding notes" is removed. Pan (knob, LFO, CV, link width) is read when a note
+- *RXl-20:* RMX-0's "pan follows sounding notes" is removed. Pan (knob, LFO, CV, link width) is read when a note
   starts, as in the stock firmware.
 - **Restart menu:** SHIFT + EDIT + PERF, then turn the encoder right to fill the bar. Any button leaves.
   Holding the encoder as the bar fills enters the updater.
@@ -80,13 +80,13 @@ Details for each feature are in the [RMX-0 docs](https://github.com/mechanical-d
 - *Golem-RMX-0:* the reverb page is on the FX button cycle: **pre** pre-delay, **dec** decay, **ton** tone,
   **ref** reflection; turn the encoder to its 2nd screen for **out** (output) and the return level.
 - A load guard bypasses the reverb if the module runs out of processing time, and brings it back when there is room.
-- *RXl-0:* the reverb runs at half the sample rate (22 kHz inside, back to 44.1 kHz at its output), which halves its
+- *RXl-20:* the reverb runs at half the sample rate (22 kHz inside, back to 44.1 kHz at its output), which halves its
   processing time, and its inner loop no longer makes a function call per step. Decay times, pre-delay and the tone
   control's corner stay as before; the tail has less top end above about 10 kHz. FX A's reverb is unchanged.
 
 ## What Golem brings
-### G1. A second FX bus (FX B): removed in RXl-0
-Golem's second FX bus is not in RXl-0: it cost too much processing time next to the global reverb. There is one
+### G1. A second FX bus (FX B): removed in RXl-20
+Golem's second FX bus is not in RXl-20: it cost too much processing time next to the global reverb. There is one
 FX bus again (Drive, Ring, Compressor or Delay), and the Output setting no longer offers **FXB**.
 Kits made with FX B still load: a voice that was sent to FX B plays dry on the output FX B used, and the FX B
 settings are cleared. The kit file layout is unchanged.
@@ -111,8 +111,8 @@ It changes pitch, waveforms, envelopes, FM, transient, filter, drive, sample rat
 limits (drum-length decays, no filter self-oscillation, moderate drive). It never changes volumes, outputs,
 FX routing, choke, velocity response, the FX buses, morph or the CV mod matrix.
 
-### G4. Morph (stock Performance page in RXl-0)
-RXl-0 removes Golem's per-voice morph (**mvc**) and morph chain (**msr**, **aut**, **lo**/**hi**, and the **scv**/**tcv**
+### G4. Morph (stock Performance page in RXl-20)
+RXl-20 removes Golem's per-voice morph (**mvc**) and morph chain (**msr**, **aut**, **lo**/**hi**, and the **scv**/**tcv**
 CV kit selection). The Performance page is the stock one again: **mrp** morphs the whole kit toward **mtg**.
 Kept from Golem: outputs, choke and voice links never morph, and voice 7 only morphs toward kits saved with its own
 voice 7 settings.
@@ -121,7 +121,7 @@ voice 7 settings.
 - The delay no longer glitches when a CV moves its time, and a mod-target bug that read past the end of a table
   is fixed.
 
-## What LXRE_MX brings (RXl-0)
+## What LXRE_MX brings (RXl-20)
 
 ### X1. Kit generator (SHIFT + PERF)
 - **SHIFT + PERF** switches the kit generator on (PERF blinks) or off. While it is on, EDIT, MOD, FX and SAVE work
@@ -131,7 +131,7 @@ voice 7 settings.
 - **TYP**: `CLS` classic techno, `EXP` experimental, `GLT` glitch / microsound. **COA**: key (`off`, C…B).
   **MOD**: one LFO route per voice. **Hz**: spectral separation (`Off`, `Sft`, `Hrd`). Levels are balanced
   automatically.
-- *RXl-0:* all **7 voices**. Voice 7 (the open hi-hat) uses voice 6's recipes with an open-hat decay that is always
+- *RXl-20:* all **7 voices**. Voice 7 (the open hi-hat) uses voice 6's recipes with an open-hat decay that is always
   longer than voice 6's. Made together with voice 6, it is the same hi-hat sound with the open decay and the same pan.
   Made on its own (hold button 7 + DRUM), it gets its own voice 6 recipe. Voice 7 has no LFO, so MOD leaves it alone.
 - The generator never changes outputs, FX buses, the reverb, sample trims, voice links or choke.
@@ -150,7 +150,7 @@ voice 7 settings.
 
 ### X4. CPU load
 - Global settings (SHIFT + LOAD/SAVE), page 1, 4th column: **cpu**, the audio engine's load in %.
-- RXl-0: the 16 KB fast instruction memory (ITCM) now holds the snare, cymbal and both hi-hat engines and the
+- RXl-20: the 16 KB fast instruction memory (ITCM) now holds the snare, cymbal and both hi-hat engines and the
   reverb sends. Code that only runs when a setting changes (kit loading, envelope and FX setters) moved out.
 
 ### X5. Fixes from LXRE_MX
@@ -162,7 +162,7 @@ voice 7 settings.
   is played with the others, so the closed hat still chokes it when both arrive together.
 - (Golem already had LXRE_MX's mod-target fix.)
 
-## RXl-0's own: Drum Stealer
+## RXl-20's own: Drum Stealer
 Borrow one drum sound from another kit without leaving your kit.
 
 1. In voice edit mode (EDIT) hold **SHIFT**, hold the voice you want to replace, then press **DRUM**. The display
@@ -181,12 +181,12 @@ sound changes the trim for both hats.
 
 ## Navigation
 - **FX**, then press again to cycle: FX → **Reverb** → **Random** → FX.
-- **SHIFT + FX** (held) + voice buttons: send voices to the FX bus and back (RXl-0).
-- Voice edit mode (RXl-0): the edited drum's LED is lit and flashes off on its triggers; the open sub-page LED
+- **SHIFT + FX** (held) + voice buttons: send voices to the FX bus and back (RXl-20).
+- Voice edit mode (RXl-20): the edited drum's LED is lit and flashes off on its triggers; the open sub-page LED
   (OSC, AEG, MOD, FM, CLICK, FILTER, MIX) blinks. If both are the same LED, it blinks. While DRUM is held, the
   LEDs show the drum selection as before.
-- **SHIFT + PERF**: kit generator on / off (RXl-0).
-- **SHIFT + voice + DRUM** (voice edit mode, DRUM last): Drum Stealer (RXl-0).
+- **SHIFT + PERF**: kit generator on / off (RXl-20).
+- **SHIFT + voice + DRUM** (voice edit mode, DRUM last): Drum Stealer (RXl-20).
 - Performance page (stock): **mrp** (morph), **mtg** (morph target), **sr** (sample rate).
 
 ## Your existing kits are safe
@@ -195,16 +195,16 @@ sound changes the trim for both hats.
 - Kits saved with **Golem** load with the reverb sends at 0.
 - Kits saved with **RMX-0** load with all their RMX-0 settings in place; voice 7 starts as a
   copy of voice 6.
-- Kits saved with Golem-RMX-0 or RXl-0 still load on the official 1.51 firmware, which ignores the extra settings.
-- RXl-0 kits use the same file layout as Golem-RMX-0, so kits move freely between the two.
+- Kits saved with Golem-RMX-0 or RXl-20 still load on the official 1.51 firmware, which ignores the extra settings.
+- RXl-20 kits use the same file layout as Golem-RMX-0, so kits move freely between the two.
 
 ## Install
-1. Download `LXRE_RXl-0_V1.0.img` from the [Releases](../../releases) page. (The module's updater only accepts files
+1. Download `LXRE_RXl-20_V1.0.img` from the [Releases](../../releases) page. (The module's updater only accepts files
    whose names start with `LXRE`.)
 2. Copy it to the top folder of a FAT32 SD card and delete any other `LXRE*.img` files from the card.
 3. With the module off, insert the card, then **press and hold the encoder** (the menu knob next to the display)
    while switching the power on. Keep holding until the updater screen appears.
-4. Wait for the success message. The module restarts and shows `RXl-0 v1.0`.
+4. Wait for the success message. The module restarts and shows `RXl-20 v1.0`.
 5. Reinstall your samples (LOAD/SAVE → `Load:Samples`) if you use them.
 
 **Going back:** flash the official 1.51 file from Erica Synths (or a Golem, RMX-0 or Golem-RMX-0 release) the same way. The
@@ -214,11 +214,11 @@ updater (bootloader) is never changed by an update, so you can always return.
 - CPU: this firmware runs one extra hi-hat voice, the FX bus and a global reverb. The reverb's load guard bypasses
   it if the module runs out of time; global settings page 1 shows the load as **cpu**.
 - Build: same as the official firmware (see below). The update file is
-  `build/release/LXRE_RXl-0_V<version>.img`. Use the full Arm GNU Toolchain (Homebrew's `arm-none-eabi-gcc`
-  formula has no C library). RXl-0 was built with Arm GNU 15.3.rel2: ITCM 15,792 of 16,384 bytes used at -O3.
+  `build/release/LXRE_RXl-20_V<version>.img`. Use the full Arm GNU Toolchain (Homebrew's `arm-none-eabi-gcc`
+  formula has no C library). RXl-20 was built with Arm GNU 15.3.rel2: ITCM 15,792 of 16,384 bytes used at -O3.
   If a newer compiler overflows it, configure with `-DLXR_ITCM_OPT=-O2`.
 - In the source, Golem changes are marked `MODIFIED`, RMX-0's `lxr-0`, code joining the two `GOLEM-RMX-0`, and
-  RXl-0's changes and LXRE_MX ports `RXl-0`.
+  RXl-20's changes and LXRE_MX ports `RXl-20`.
   RMX-0's features can be switched off one by one in `Core/Inc/lxr0.h`.
 
 ## Licence

@@ -72,7 +72,7 @@ enum SelectModes
 
 	SELECT_MODE_SAVE_MORPH,
 #if EURORACK_MODULE
-	SELECT_MODE_KGEN,		// RXl-0 (LXRE_MX): kit generator (SHIFT+PERF), = 8
+	SELECT_MODE_KGEN,		// RXl-20 (LXRE_MX): kit generator (SHIFT+PERF), = 8
 #endif
 #if !EURORACK_MODULE
 	SELECT_MODE_PATTERN,
@@ -199,7 +199,7 @@ void buttonHandler_buttonReleased(uint8_t buttonNr);
 uint8_t buttonHandler_getMode();
 //--------------------------------------------------------
 void buttonHandler_setMode(uint8_t mode);
-// RXl-0: voice edit LEDs - the edited drum lit (its triggers flash it off), the open sub-page blinking
+// RXl-20: voice edit LEDs - the edited drum lit (its triggers flash it off), the open sub-page blinking
 void buttonHandler_showVoiceEditLeds(void);
 //--------------------------------------------------------
 

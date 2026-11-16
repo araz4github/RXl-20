@@ -20,7 +20,7 @@
 #define LXR0_LINK 1
 // LFO shapes after the vendor's eight: smooth random, exponential triangle, one-shots (lxr0_lfo.c)
 #define LXR0_LFO 1
-// RXl-0: RMX-0's "pan follows sounding notes" is removed. Pan is latched at note on, as in the stock firmware.
+// RXl-20: RMX-0's "pan follows sounding notes" is removed. Pan is latched at note on, as in the stock firmware.
 // version on the boot screen (docs/RELEASES.md)
 #define LXR0_VERSION "1.0"
 

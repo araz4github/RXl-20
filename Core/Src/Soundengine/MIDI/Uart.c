@@ -13,7 +13,7 @@
 #include "stm32f7xx_hal.h"
 #include "Soundengine/MIDI/MidiParser.h"
 #include "Soundengine/MIDI/Uart.h"
-#include "Soundengine/TriggerProcessor.h" // RXl-0: Trigger_resetVoiceTriggered
+#include "Soundengine/TriggerProcessor.h" // RXl-20: Trigger_resetVoiceTriggered
 #include "Soundengine/FIFO.h"
 #include "Soundengine/config.h"
 #include "main.h"
@@ -164,7 +164,7 @@ void lxr0_setOpHhMidi(uint8_t midiOn)
 	if(midiOn)
 	{
 		EXTI->IMR &= ~EXTI9_Trigger_7_Pin; // OP HH no longer triggers the voice
-		Trigger_resetVoiceTriggered(6); // RXl-0: drop a trigger the SysTick handler has not played yet
+		Trigger_resetVoiceTriggered(6); // RXl-20: drop a trigger the SysTick handler has not played yet
 		__HAL_RCC_USART3_CLK_ENABLE();
 		gpio.Mode = GPIO_MODE_AF_PP;
 		gpio.Alternate = GPIO_AF7_USART3;

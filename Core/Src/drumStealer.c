@@ -1,7 +1,7 @@
 /*
  * drumStealer.c
  *
- * RXl-0 Drum Stealer, see drumStealer.h.
+ * RXl-20 Drum Stealer, see drumStealer.h.
  *
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only

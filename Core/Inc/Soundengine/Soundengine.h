@@ -34,6 +34,6 @@ void soundengine_init();
 void soundengine_process();
 uint8_t soundengine_calcNextSampleBlock();
 
-// RXl-0 (from LXRE_MX): audio load [% of one block's time budget], fast rise / slow fall (CONFIG page)
+// RXl-20 (from LXRE_MX): audio load [% of one block's time budget], fast rise / slow fall (CONFIG page)
 extern volatile float soundengine_cpuLoad;
 #endif /* INC_SOUNDENGINE_SOUNDENGINE_H_ */

@@ -1,6 +1,6 @@
-# RXl-0 v1.0
+# RXl-20 v1.0
 
-Update file: `LXRE_RXl-0_V1.0.img`. Based on Golem-RMX-0 v1.0 and Erica Synths' LXR Eurorack firmware v1.51.
+Update file: `LXRE_RXl-20_V1.0.img`. Based on Golem-RMX-0 v1.0 and Erica Synths' LXR Eurorack firmware v1.51.
 Unofficial: not made, approved or supported by Erica Synths or by the authors of Golem, RMX-0 or LXRE_MX.
 
 ## From LXRE_MX v1.1.1 (Roman, RN01MA)
@@ -13,7 +13,7 @@ Unofficial: not made, approved or supported by Erica Synths or by the authors of
   CV read timing, accent latching and the open hi-hat trigger timing.
 - Not included: LXRE_MX's DJ filter.
 
-## New in RXl-0: Drum Stealer
+## New in RXl-20: Drum Stealer
 - SHIFT + voice + DRUM (voice edit mode) opens it. The encoder browses kits 0–127, the blinking voice buttons
   audition compatible voices on your voice (your mix kept, played on St1, everything else silent), a held voice +
   DRUM copies it, SHIFT or PERF cancels. See the README.
@@ -31,7 +31,7 @@ Unofficial: not made, approved or supported by Erica Synths or by the authors of
 - The Performance page is the stock one again (morph, morph target, sample rate). Golem's per-voice morph,
   morph chain (source kit, auto-advance, kit range) and the CV kit selection on global settings sub-page 2 are
   removed. Outputs, choke and voice links still never morph.
-- Kit files are unchanged: kits move freely between Golem-RMX-0 and RXl-0.
+- Kit files are unchanged: kits move freely between Golem-RMX-0 and RXl-20.
 
 ---
 

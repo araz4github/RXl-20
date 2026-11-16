@@ -140,7 +140,7 @@ void FxBus_prepareFxChange()
 //	Ringmod_resetPhase(&fxBus.ringmod);
 }
 
-/*RXl-0: out of ITCM, not per sample*/ void FxBus_updateParameter()
+/*RXl-20: out of ITCM, not per sample*/ void FxBus_updateParameter()
 {
 	switch(fxBus.fxType)
 	{
@@ -189,7 +189,7 @@ void FxBus_prepareFxChange()
 	}
 }
 
-/*RXl-0: out of ITCM, not per sample*/ void FxBus_setParameter(uint8_t idx, float value)
+/*RXl-20: out of ITCM, not per sample*/ void FxBus_setParameter(uint8_t idx, float value)
 {
 	fxBus.parameter[idx] = value;
 

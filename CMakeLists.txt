@@ -20,8 +20,8 @@ if(NOT CMAKE_TOOLCHAIN_FILE)
 endif()
 
 project(LXR_V2_STM32F765_Eurorack
-    VERSION 1.0 # RXl-0: MODIFIED (Golem-RMX-0 + parts of LXRE_MX) - not official Erica Synths firmware
-    DESCRIPTION "RXl-0 (LXR firmware mod): unofficial custom firmware for the Erica Synths LXR V2 Eurorack drum module"
+    VERSION 1.0 # RXl-20: MODIFIED (Golem-RMX-0 + parts of LXRE_MX) - not official Erica Synths firmware
+    DESCRIPTION "RXl-20 (LXR firmware mod): unofficial custom firmware for the Erica Synths LXR V2 Eurorack drum module"
     LANGUAGES C ASM
 )
 
@@ -29,8 +29,8 @@ project(LXR_V2_STM32F765_Eurorack
 # modified build is never mistaken for official firmware (NOTICE.md). The updater needs the LXRE prefix.
 file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc/lxr0.h" RMX0_VERSION_LINE REGEX "^#define LXR0_VERSION ")
 string(REGEX REPLACE ".*\"([^\"]+)\".*" "\\1" RMX0_VERSION "${RMX0_VERSION_LINE}")
-# RXl-0: named after this merge's own version (project VERSION above). The updater needs the LXRE prefix.
-set(RMX0_IMAGE_NAME LXRE_RXl-0_V${PROJECT_VERSION})
+# RXl-20: named after this merge's own version (project VERSION above). The updater needs the LXRE prefix.
+set(RMX0_IMAGE_NAME LXRE_RXl-20_V${PROJECT_VERSION})
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type (Debug or Release)" FORCE)

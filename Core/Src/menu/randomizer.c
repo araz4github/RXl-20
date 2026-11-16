@@ -80,7 +80,7 @@ uint8_t voiceParams_isMorphed(uint16_t paramNr, uint8_t morphTargetKitValid7)
 	// voice 7 settings: only morph toward a kit that was saved with its own voice 7
 	if((paramNr >= PAR_HH7_COARSE) && (paramNr <= PAR_HH7_CHOKE) && !morphTargetKitValid7) return 0;
 
-	return 1;	// RXl-0: whole kit (Golem's per-voice morph removed)
+	return 1;	// RXl-20: whole kit (Golem's per-voice morph removed)
 }
 
 //-----------------------------------------------------------------------------

@@ -196,7 +196,7 @@ IN_ITCM_RAM uint32_t lfo_calcPhaseInc(float freq, uint8_t sync)
 	return (lfoSyncfreq / (LFO_SR)) * 0xffffffff;
 }
 //-------------------------------------------------------------
-/*RXl-0: out of ITCM, not per sample*/ void lfo_setFreq(Lfo *lfo, float f)
+/*RXl-20: out of ITCM, not per sample*/ void lfo_setFreq(Lfo *lfo, float f)
 {
 	//f += 1;
 	//f = f/128.f;

@@ -14,7 +14,7 @@
 //#include "../config.h"
 #include <frontPanelParser_ui.h>
 #include "Preset/PresetManager.h"
-#include "drumStealer.h"	// RXl-0
+#include "drumStealer.h"	// RXl-20
 //#include "../Hardware/SD/ff.h"
 #include "../../Middlewares/Third_Party/FatFs/src/ff.h"
 #include <stdio.h>
@@ -31,7 +31,7 @@
 #include "Soundengine/MIDI/MidiParser.h"
 //#include "Soundengine/Sequencer/sequencer.h"
 #include "Soundengine/Soundengine.h"
-#include "Soundengine/DSPAudio/mixer.h"	// RXl-0: MIXER_ROUTING_* for preset_dropFxBusB
+#include "Soundengine/DSPAudio/mixer.h"	// RXl-20: MIXER_ROUTING_* for preset_dropFxBusB
 #include "menu/randomizer.h"	// MODIFIED: per-voice morph (voice parameter lists)
 #include "Soundengine/DSPAudio/FX/lxr0_reverbBus.h" // lxr-0
 
@@ -353,7 +353,7 @@ void preset_processTimer()
 		}
 	}
 #endif
-	if(drumStealer_isActive()) return;	// RXl-0: no autosave of Drum Stealer auditions
+	if(drumStealer_isActive()) return;	// RXl-20: no autosave of Drum Stealer auditions
 	if(preset_kitDirty == 1)
 	{
 		if(HAL_GetTick()-preset_kitTimer >= PRESET_SAVE_TIME )
@@ -1129,7 +1129,7 @@ static uint8_t interpolate(uint8_t a, uint8_t b, uint8_t x)
 
 //----------------------------------------------------
 //----------------------------------------------------
-// RXl-0: Golem's FX bus B is removed. A kit made with it can still route a voice there (output 7):
+// RXl-20: Golem's FX bus B is removed. A kit made with it can still route a voice there (output 7):
 // that voice now plays dry on the output FX B used, and the bus B settings are cleared.
 #define RXL0_OLD_FX_BUS_B	7
 static __attribute__((noinline)) void preset_dropFxBusB(uint8_t* p)	// kept out of ITCM
@@ -1141,10 +1141,10 @@ static __attribute__((noinline)) void preset_dropFxBusB(uint8_t* p)	// kept out 
 	if(p[PAR_HH7_AUDIO_OUT] >= RXL0_OLD_FX_BUS_B) p[PAR_HH7_AUDIO_OUT] = out;
 	for(uint16_t i=PAR_FX2_TYPE; i<=PAR_FX2_P4; i++) p[i] = 0;
 }
-/*RXl-0: out of ITCM, not per sample*/ void preset_sendDrumsetParametersImmediate()
+/*RXl-20: out of ITCM, not per sample*/ void preset_sendDrumsetParametersImmediate()
 {
 	uint8_t i;
-	preset_dropFxBusB(activeParameters);	// RXl-0
+	preset_dropFxBusB(activeParameters);	// RXl-20
 		//special case mod targets
 		// lxr-0: 6 velocity and LFO settings. This loop ran NUM_MOD_SLOTS times, which set bytes after the LFO voices to 1
 		for(i=0;i<6;i++)
@@ -1248,7 +1248,7 @@ static __attribute__((noinline)) void preset_dropFxBusB(uint8_t* p)	// kept out 
 void preset_sendDrumsetParameters()
 {
 	uint8_t i;
-	preset_dropFxBusB(activeParameters);	// RXl-0
+	preset_dropFxBusB(activeParameters);	// RXl-20
 	//special case mod targets
 	// lxr-0: 6 velocity and LFO settings. This loop ran NUM_MOD_SLOTS times, which set bytes after the LFO voices to 1
 	for(i=0;i<6;i++)
@@ -2157,7 +2157,7 @@ void preset_morph(uint8_t morph, uint8_t forceResetIndex)
 }
 
 //----------------------------------------------------
-// RXl-0 (from LXRE_MX): parameters that are a choice, not an amount. Interpolated as numbers
+// RXl-20 (from LXRE_MX): parameters that are a choice, not an amount. Interpolated as numbers
 // they step through every value in between (e.g. filter LP->HP via BP), each step a click.
 static uint8_t preset_isDiscrete(uint16_t index)
 {
@@ -2176,7 +2176,7 @@ static uint8_t preset_isDiscrete(uint16_t index)
 	}
 }
 //----------------------------------------------------
-// RXl-0 (from LXRE_MX): FX bus type and output stay as in the current
+// RXl-20 (from LXRE_MX): FX bus type and output stay as in the current
 // kit, like the voice routing. Morphed as numbers, TYP would pass through every effect in
 // between and OUT would jump from output to output.
 static uint8_t preset_isFxBusSwitch(uint16_t index)
@@ -2186,7 +2186,7 @@ static uint8_t preset_isFxBusSwitch(uint16_t index)
 //----------------------------------------------------
 uint8_t preset_getMorphValue(uint16_t index, uint8_t morph)
 {
-	// RXl-0: stock morph (edit buffer -> PAR_MORPH_TARGET kit, whole kit). Golem's per-voice
+	// RXl-20: stock morph (edit buffer -> PAR_MORPH_TARGET kit, whole kit). Golem's per-voice
 	// morph and morph chain are removed; routing, choke and voice links still keep the
 	// loaded kit's value, and voice 7 only morphs toward a kit saved with its own voice 7.
 	const uint8_t target = activeParameters[PAR_MORPH_TARGET];
@@ -2196,7 +2196,7 @@ uint8_t preset_getMorphValue(uint16_t index, uint8_t morph)
 	{
 		return activeParameters[index];
 	}
-	// RXl-0 (from LXRE_MX): click-free morph. A choice (waveform, filter type, LFO target,
+	// RXl-20 (from LXRE_MX): click-free morph. A choice (waveform, filter type, LFO target,
 	// on/off...) changes once, half way, instead of stepping through every value in between.
 	if(preset_isDiscrete(index))
 	{

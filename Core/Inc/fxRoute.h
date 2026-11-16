@@ -7,7 +7,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA), extended to Golem's voice 7.
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA), extended to Golem's voice 7.
  *
  * This file is part of the LXR firmware. It is licensed under the GNU General
  * Public License version 3, with the additional permission and terms in

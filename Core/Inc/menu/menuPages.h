@@ -528,7 +528,7 @@ const Page menuPages[NUM_PAGES][NUM_SUB_PAGES] =
 #if EURORACK_MODULE && LXR0_MIDI
 		// lxr-0: OP HH as MIDI in and the global MIDI channel on the 2nd screen, then channels and notes per voice
 		{
-				// RXl-0: cpu is display only, in the 4th column (the empty 3rd keeps the encoder off it)
+				// RXl-20: cpu is display only, in the 4th column (the empty 3rd keeps the encoder off it)
 				TEXT_SCREENSAVER_ON_OFF,    TEXT_CV_SAVE, 	TEXT_EMPTY, 	TEXT_CPU_LOAD, 	TEXT_LXR0_OPHH_MIDI, TEXT_MIDI_CHAN_GLOBAL, TEXT_EMPTY,  TEXT_EMPTY,
 				PAR_SCREENSAVER_ON_OFF,     PAR_CV_SAVE, 		PAR_NONE, 		PAR_CPU_LOAD, 	PAR_MIDI_MODE,  	PAR_MIDI_CHAN_GLOBAL, 	PAR_NONE,    PAR_NONE
 		},
@@ -545,7 +545,7 @@ const Page menuPages[NUM_PAGES][NUM_SUB_PAGES] =
 				TEXT_SCREENSAVER_ON_OFF,    TEXT_CV_SAVE, 	TEXT_EMPTY, 	TEXT_CPU_LOAD, 	TEXT_EMPTY, TEXT_EMPTY, TEXT_EMPTY,  TEXT_EMPTY,
 				PAR_SCREENSAVER_ON_OFF,     PAR_CV_SAVE, 		PAR_NONE, 		PAR_CPU_LOAD, 		PAR_NONE,  	PAR_NONE, 	PAR_NONE,    PAR_NONE
 		},
-		{ // GMENU 2nd sub page of global settings (RXl-0: empty again, as in the stock firmware)
+		{ // GMENU 2nd sub page of global settings (RXl-20: empty again, as in the stock firmware)
 				TEXT_EMPTY, 	TEXT_EMPTY,		TEXT_EMPTY,		TEXT_EMPTY,		TEXT_EMPTY,		TEXT_EMPTY,			TEXT_EMPTY,	TEXT_EMPTY,
 				PAR_NONE, 		PAR_NONE,		PAR_NONE, 		PAR_NONE,		PAR_NONE,		PAR_NONE,			PAR_NONE,	PAR_NONE
 		},
@@ -609,7 +609,7 @@ const Page menuPages[NUM_PAGES][NUM_SUB_PAGES] =
 		}
 #else
 		{
-					TEXT_MORPH,	TEXT_MORPH_TARGET, 	TEXT_SAMPLE_RATE,			TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	// RXl-0: stock Performance page
+					TEXT_MORPH,	TEXT_MORPH_TARGET, 	TEXT_SAMPLE_RATE,			TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	TEXT_EMPTY,	// RXl-20: stock Performance page
 					PAR_MORPH,	PAR_MORPH_TARGET,	PAR_VOICE_DECIMATION_ALL,	PAR_NONE,	PAR_NONE,	PAR_NONE,	PAR_NONE,	PAR_NONE
 		}
 #endif
@@ -719,7 +719,7 @@ const Page menuPages[NUM_PAGES][NUM_SUB_PAGES] =
 			PAR_FX_TYPE,	PAR_FX_ROUTING,		PAR_FX_DRY_WET,		PAR_FX_REVERB_TYPE,	PAR_FX_P1,			PAR_FX_P2,			PAR_FX_P3,		PAR_FX_P4
 		},
 #endif
-			// RXl-0: subpage 6 was Golem's FX bus B (removed)
+			// RXl-20: subpage 6 was Golem's FX bus B (removed)
 		{
 			TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,TEXT_EMPTY,
 			PAR_NONE,PAR_NONE,PAR_NONE,PAR_NONE,PAR_NONE,PAR_NONE,PAR_NONE,PAR_NONE
@@ -732,7 +732,7 @@ const Page menuPages[NUM_PAGES][NUM_SUB_PAGES] =
 
 
 	},
-	//------------------ RXl-0 (LXRE_MX): KIT GENERATOR PAGE (SHIFT+PERF) -----
+	//------------------ RXl-20 (LXRE_MX): KIT GENERATOR PAGE (SHIFT+PERF) -----
 	// one screen: type, key, LFO routing, spectral slotting
 	{
 		{

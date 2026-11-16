@@ -27,7 +27,7 @@ static __fp16 verbBuffer[VERB_BUFFER_SIZE];	// .bss in SRAM1; FX_BUFFER (DTCM) s
 static Reverb verb;
 static int16_t sendSum[OUTPUT_DMA_SIZE*2];	// interleaved L/R, Reverb_process mixes them to mono
 static int16_t wet[OUTPUT_DMA_SIZE*2];
-// RXl-0: the reverb runs at half the sample rate (half the processing time)
+// RXl-20: the reverb runs at half the sample rate (half the processing time)
 #define HALF_SIZE (OUTPUT_DMA_SIZE/2)
 static int16_t sendHalf[HALF_SIZE*2];	// interleaved L/R, both the same (the send is mono)
 static int16_t wetHalf[HALF_SIZE*2];
@@ -79,7 +79,7 @@ void lxr0Verb_init(void)
 	verb.reverbBufferSram = verbBuffer;
 	verb.stereo = 1;
 	Reverb_init(&verb);
-	Reverb_setHalfRate(&verb);	// RXl-0
+	Reverb_setHalfRate(&verb);	// RXl-20
 	staggerLines();
 	budget = (uint32_t)(((uint64_t)SystemCoreClock * OUTPUT_DMA_SIZE) / 44100);
 	memset(lastParams, 0xff, sizeof(lastParams)); // apply every setting on the first block
@@ -124,7 +124,7 @@ void lxr0Verb_beginBlock(void)
 	memset(sendSum, 0, sizeof(sendSum));
 }
 
-IN_ITCM_RAM void lxr0Verb_addSend(uint8_t voice, const int16_t* data)	// RXl-0: ITCM, 7 times a block
+IN_ITCM_RAM void lxr0Verb_addSend(uint8_t voice, const int16_t* data)	// RXl-20: ITCM, 7 times a block
 {
 	const float g = sendGain[voice];
 	if(g <= 0.f || lxr0Verb_bypassed)
@@ -170,7 +170,7 @@ static void mixWet(int16_t* output, int16_t* output2)
 	}
 }
 
-// RXl-0: 44.1 kHz send -> 22.05 kHz, with a [1 2 1]/4 low pass against aliasing
+// RXl-20: 44.1 kHz send -> 22.05 kHz, with a [1 2 1]/4 low pass against aliasing
 static void decimate(void)
 {
 	for(uint8_t j=0; j<HALF_SIZE; j++)
@@ -183,7 +183,7 @@ static void decimate(void)
 	}
 }
 
-// RXl-0: 22.05 kHz wet -> 44.1 kHz, linear interpolation
+// RXl-20: 22.05 kHz wet -> 44.1 kHz, linear interpolation
 static void interpolate(void)
 {
 	for(uint8_t j=0; j<HALF_SIZE; j++)

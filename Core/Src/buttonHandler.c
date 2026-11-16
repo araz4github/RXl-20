@@ -28,15 +28,15 @@
 #include "Soundengine/FxBus.h"
 #include "Soundengine/MIDI/MidiVoiceControl.h"
 #include <Soundengine/TriggerProcessor.h>
-#include "Preset/kitGenUi.h"	// RXl-0 (LXRE_MX): kit generator
-#include "fxRoute.h"			// RXl-0 (LXRE_MX): SHIFT+FX voice routing
-#include "drumStealer.h"	// RXl-0
+#include "Preset/kitGenUi.h"	// RXl-20 (LXRE_MX): kit generator
+#include "fxRoute.h"			// RXl-20 (LXRE_MX): SHIFT+FX voice routing
+#include "drumStealer.h"	// RXl-20
 #if LXR0_LINK
 #include "Soundengine/lxr0_voiceLink.h"
 #endif
 
-static uint8_t kgen_shiftPerfPending = 0;	// RXl-0: SHIFT+PERF pressed, kit generator toggles on release
-static uint8_t rxl0_heldVoices = 0;	//RXl-0: voice buttons held (bit n = voice n+1), for the Drum Stealer
+static uint8_t kgen_shiftPerfPending = 0;	// RXl-20: SHIFT+PERF pressed, kit generator toggles on release
+static uint8_t rxl0_heldVoices = 0;	//RXl-20: voice buttons held (bit n = voice n+1), for the Drum Stealer
 #if LXR0_RESTART
 static uint8_t lxr0_editHeld = 0;
 static uint8_t lxr0_perfHeld = 0;
@@ -320,7 +320,7 @@ uint8_t buttonHandler_getShiftButton ()
 }
 #endif
 //--------------------------------------------------------
-// RXl-0: in voice edit mode the LED of the drum being edited is lit, so a trigger on it flashes it off
+// RXl-20: in voice edit mode the LED of the drum being edited is lit, so a trigger on it flashes it off
 // (led_pulseLed toggles), and the open sub-page (OSC, AEG, MOD, FM, CLICK, FILTER, MIX) blinks instead
 // of being lit. Where both are the same LED it blinks. Other modes keep the original sub-page LED.
 static void buttonHandler_stopVoiceEditBlink(void)
@@ -360,7 +360,7 @@ static void buttonHandler_handleModeButtons(uint8_t mode) {
 #endif
 	}
 
-	//RXl-0 (LXRE_MX): leaving the kit generator page, its voice LEDs go off
+	//RXl-20 (LXRE_MX): leaving the kit generator page, its voice LEDs go off
 	if(buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_KGEN && mode != SELECT_MODE_KGEN)
 	{
 		KitGenUi_leave();
@@ -400,7 +400,7 @@ static void buttonHandler_handleModeButtons(uint8_t mode) {
 		//mode = buttonHandler_stateMemory.selectButtonMode == mode ? SELECT_MODE_SAVE : mode;
 	}
 
-	buttonHandler_stateMemory.selectButtonMode = (uint8_t) (mode & 0x0F);	// RXl-0: 4 bit field, SELECT_MODE_KGEN = 8
+	buttonHandler_stateMemory.selectButtonMode = (uint8_t) (mode & 0x0F);	// RXl-20: 4 bit field, SELECT_MODE_KGEN = 8
 	mode = buttonHandler_stateMemory.selectButtonMode;
 
 	led_clearAllBlinkLeds();
@@ -424,7 +424,7 @@ static void buttonHandler_handleModeButtons(uint8_t mode) {
 			led_setMode2(buttonHandler_stateMemory.selectButtonMode);
 			//set menu to voice page mode
 			menu_switchPage(menu_getActiveVoice());
-			buttonHandler_showVoiceEditLeds();	// RXl-0: was led_setActiveSelectButton(menu_getSubPage()+1)
+			buttonHandler_showVoiceEditLeds();	// RXl-20: was led_setActiveSelectButton(menu_getSubPage()+1)
 			menu_resetActiveParameter();
 		}
 		break;
@@ -546,7 +546,7 @@ static void buttonHandler_handleModeButtons(uint8_t mode) {
 			menu_switchPage(MENU_MIDI_PAGE);
 			break;
 
-		//RXl-0 (LXRE_MX): kit generator page (the mode is switched on/off with SHIFT+PERF)
+		//RXl-20 (LXRE_MX): kit generator page (the mode is switched on/off with SHIFT+PERF)
 		case SELECT_MODE_KGEN:
 			led_setMode2(SELECT_MODE_KGEN);
 			menu_enterKitGenPage();
@@ -798,7 +798,7 @@ static void buttonHandler_handleSelectButton(uint8_t buttonNr) {
 			//go to 1st parameter on sub page
 			menu_resetActiveParameter();
 			if(buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_VOICE)
-				buttonHandler_showVoiceEditLeds();	// RXl-0: edited drum lit, sub-page blinking
+				buttonHandler_showVoiceEditLeds();	// RXl-20: edited drum lit, sub-page blinking
 			else
 				led_setActiveSelectButton(buttonNr);
 			menu_repaintAll();
@@ -1654,8 +1654,8 @@ static void buttonHandler_lxr0LinkRelease(uint8_t voiceNr);
 void buttonHandler_voiceButtonReleased(uint8_t voiceNr)
 {
 #if EURORACK_MODULE
-	if(fxRoute_isActive()) return;	//RXl-0 (LXRE_MX): SHIFT+FX routing, no voice action
-	//RXl-0 (LXRE_MX): kit generator page
+	if(fxRoute_isActive()) return;	//RXl-20 (LXRE_MX): SHIFT+FX routing, no voice action
+	//RXl-20 (LXRE_MX): kit generator page
 	if(menu_activePage == KGEN_PAGE)
 	{
 		KitGenUi_voiceReleased(voiceNr);
@@ -1705,7 +1705,7 @@ static uint8_t buttonHandler_lxr0LinkPress(const uint8_t voiceNr)
 		lxr0Link_setSolo(0);
 		lxr0_lastTap = 0xff;
 		menu_lxr0OpenLink((uint8_t)__builtin_ctz(group));
-		buttonHandler_showVoiceEditLeds();	// RXl-0
+		buttonHandler_showVoiceEditLeds();	// RXl-20
 		return 1;
 	}
 	if(lxr0Link_voices() & bit)
@@ -1749,13 +1749,13 @@ void buttonHandler_lxr0LinkTick(void)
  void buttonHandler_voiceButtonPressed(uint8_t voiceNr)
 {
 #if EURORACK_MODULE
-	//RXl-0 (LXRE_MX): SHIFT+FX held, route the voice, no trigger
+	//RXl-20 (LXRE_MX): SHIFT+FX held, route the voice, no trigger
 	if(fxRoute_isActive())
 	{
 		fxRoute_voicePressed(voiceNr);
 		return;
 	}
-	//RXl-0 (LXRE_MX): kit generator page, voice buttons audition (held + DRUM = roll only them)
+	//RXl-20 (LXRE_MX): kit generator page, voice buttons audition (held + DRUM = roll only them)
 	if(menu_activePage == KGEN_PAGE)
 	{
 		KitGenUi_voicePressed(voiceNr);
@@ -2014,7 +2014,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 	screensaver_touch();
 
 #if EURORACK_MODULE
-	//RXl-0: Drum Stealer. Voice buttons held (for SHIFT + voice + DRUM), and while it is open
+	//RXl-20: Drum Stealer. Voice buttons held (for SHIFT + voice + DRUM), and while it is open
 	//it owns the buttons: SHIFT / PERF cancel, voices audition, held voice + DRUM copies
 	if((buttonNr >= BUT_2) && (buttonNr <= BUT_8)) rxl0_heldVoices |= (uint8_t)(1 << (buttonNr - BUT_2));
 	if(drumStealer_isActive())
@@ -2048,7 +2048,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 	}
 	if(buttonHandler_getShiftButton() && lxr0_editHeld && lxr0_perfHeld)
 	{
-		kgen_shiftPerfPending = 0;	// RXl-0: SHIFT+EDIT+PERF is the restart menu, not the kit generator
+		kgen_shiftPerfPending = 0;	// RXl-20: SHIFT+EDIT+PERF is the restart menu, not the kit generator
 		menu_lxr0RestartOpen();
 		return;
 	}
@@ -2061,7 +2061,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 #if EURORACK_MODULE
 
 	case BUT_FX:
-		//RXl-0 (LXRE_MX): SHIFT+FX held, voice buttons route voices to FX A / FX B (fxRoute.c)
+		//RXl-20 (LXRE_MX): SHIFT+FX held, voice buttons route voices to FX A / FX B (fxRoute.c)
 		if(buttonHandler_getShiftButton())
 			fxRoute_fxPressed(1);
 		else
@@ -2078,7 +2078,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 
 	case BUT_1:
 
-		//RXl-0: SHIFT + one voice held + DRUM in voice edit mode opens the Drum Stealer
+		//RXl-20: SHIFT + one voice held + DRUM in voice edit mode opens the Drum Stealer
 		if(buttonHandler_getShiftButton() && (buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_VOICE)
 			&& (menu_activePage <= VOICE7_PAGE) && rxl0_heldVoices && !(rxl0_heldVoices & (rxl0_heldVoices - 1)))
 		{
@@ -2088,7 +2088,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 			break;
 		}
 
-		//RXl-0 (LXRE_MX): kit generator page, DRUM = new kit (or only the held voices)
+		//RXl-20 (LXRE_MX): kit generator page, DRUM = new kit (or only the held voices)
 		if(buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_KGEN)
 		{
 			KitGenUi_drumPressed();
@@ -2106,7 +2106,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 
 			//While held, use button 1-8 to select voice
 
-			//RXl-0: no sub-page blink over the "selected drum" LEDs while DRUM is held
+			//RXl-20: no sub-page blink over the "selected drum" LEDs while DRUM is held
 			if(buttonHandler_stateMemory.selectButtonMode == SELECT_MODE_VOICE)
 				buttonHandler_stopVoiceEditBlink();
 
@@ -2167,7 +2167,7 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 
 		if(buttonHandler_getShiftButton())
 		{
-			//RXl-0 (LXRE_MX): SHIFT+PERF switches the kit generator on / off. Done on the PERF
+			//RXl-20 (LXRE_MX): SHIFT+PERF switches the kit generator on / off. Done on the PERF
 			//release, so that SHIFT+PERF+EDIT (restart menu, either order) never toggles it.
 			kgen_shiftPerfPending = 1;
 		}
@@ -2614,13 +2614,13 @@ void buttonHandler_buttonPressed(uint8_t buttonNr) {
 //--------------------------------------------------------
 void buttonHandler_buttonReleased(uint8_t buttonNr)
 {
-	if(buttonNr == BUT_FX) fxRoute_fxReleased();	//RXl-0 (LXRE_MX)
+	if(buttonNr == BUT_FX) fxRoute_fxReleased();	//RXl-20 (LXRE_MX)
 #if LXR0_RESTART
 	if(buttonNr == BUT_EDIT) lxr0_editHeld = 0;
 	if(buttonNr == BUT_PERF) lxr0_perfHeld = 0;
 #endif
 #if EURORACK_MODULE
-	//RXl-0: Drum Stealer
+	//RXl-20: Drum Stealer
 	if((buttonNr >= BUT_2) && (buttonNr <= BUT_8))
 	{
 		rxl0_heldVoices &= (uint8_t)~(1 << (buttonNr - BUT_2));
@@ -2639,7 +2639,7 @@ void buttonHandler_buttonReleased(uint8_t buttonNr)
 
 
 	case BUT_1:
-		//RXl-0 (LXRE_MX): kit generator page, nothing to do (the kit was made on the press)
+		//RXl-20 (LXRE_MX): kit generator page, nothing to do (the kit was made on the press)
 		if((buttonNr == BUT_1) && (buttonHandler_getMode() == SELECT_MODE_KGEN))
 		{
 			KitGenUi_drumReleased();
@@ -2665,7 +2665,7 @@ void buttonHandler_buttonReleased(uint8_t buttonNr)
 			led_reset(LED_7);
 			led_reset(LED_8);
 		}
-		//RXl-0: DRUM released in voice edit mode - show the (possibly new) edited drum
+		//RXl-20: DRUM released in voice edit mode - show the (possibly new) edited drum
 		if((buttonNr == BUT_1) && (buttonHandler_getMode() == SELECT_MODE_VOICE))
 			buttonHandler_showVoiceEditLeds();
 
@@ -2691,7 +2691,7 @@ void buttonHandler_buttonReleased(uint8_t buttonNr)
 		break;
 
 	case BUT_PERF :
-		//RXl-0 (LXRE_MX): kit generator on / off (SHIFT+PERF, see the press)
+		//RXl-20 (LXRE_MX): kit generator on / off (SHIFT+PERF, see the press)
 		if(kgen_shiftPerfPending)
 		{
 			kgen_shiftPerfPending = 0;
@@ -2959,5 +2959,5 @@ void buttonHandler_init()
 	led_setActiveSelectButton(menu_getSubPage()+1);
 	menu_resetActiveParameter();
 	buttonHandler_buttonPressed(BUT_2);
-	buttonHandler_showVoiceEditLeds();	// RXl-0
+	buttonHandler_showVoiceEditLeds();	// RXl-20
 }

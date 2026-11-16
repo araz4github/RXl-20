@@ -396,7 +396,7 @@ enum ParamEnums
 	PAR_CV_SRC_17,
 	PAR_CV_SRC_18,
 
-	// RXl-0: Golem's FX bus B is removed (CPU). These 8 slots stay so kit files keep their layout:
+	// RXl-20: Golem's FX bus B is removed (CPU). These 8 slots stay so kit files keep their layout:
 	// they are not used, and are cleared when a kit is loaded (see preset_dropFxBusB).
 	PAR_FX2_TYPE, //301
 	PAR_FX2_ROUTING,
@@ -548,12 +548,12 @@ enum ParamEnums
 	PAR_RAND_GO,
 	PAR_RAND_UNDO,
 
-	// RXl-0: Golem's per-voice morph and morph chain parameters were here (menu only, removed)
+	// RXl-20: Golem's per-voice morph and morph chain parameters were here (menu only, removed)
 
-	// RXl-0 (from LXRE_MX): CONFIG page audio block load [%], read only, not saved
+	// RXl-20 (from LXRE_MX): CONFIG page audio block load [%], read only, not saved
 	PAR_CPU_LOAD,
 
-	// RXl-0 (from LXRE_MX): kit generator (SHIFT+PERF page), menu only, not saved
+	// RXl-20 (from LXRE_MX): kit generator (SHIFT+PERF page), menu only, not saved
 	PAR_KGEN_TYPE,					// CLS / EXP / GLT
 	PAR_KGEN_KEY,					// 0 = off, 1..12 = C..B
 	PAR_KGEN_MOD,					// LFO routing on/off

@@ -12,7 +12,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
  * (Golem's parameter randomizer is menu/randomizer.c) and extended to Golem's voice 7.
  *
  * This file is part of the LXR firmware. It is licensed under the GNU General

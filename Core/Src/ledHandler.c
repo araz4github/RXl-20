@@ -18,7 +18,7 @@
 #include "menu/menu.h"
 #include "main.h"
 #include "Soundengine/globals.h"
-#include "Preset/kitGenUi.h"	// RXl-0 (LXRE_MX)
+#include "Preset/kitGenUi.h"	// RXl-20 (LXRE_MX)
 #include "buttonHandler.h"
 //#include "Soundengine/Sequencer/sequencer.h"
 
@@ -661,7 +661,7 @@ void led_setMode2(uint8_t status)
 				led_setBlinkLed(LED_SAVE_LOAD,1);
 			break;
 
-			case SELECT_MODE_KGEN: //RXl-0 (LXRE_MX): kit generator
+			case SELECT_MODE_KGEN: //RXl-20 (LXRE_MX): kit generator
 				led_setBlinkLed(LED_PERF,1);
 			break;
 
@@ -669,7 +669,7 @@ void led_setMode2(uint8_t status)
 			default:
 			break;
 		}
-		//RXl-0 (LXRE_MX): kit generator switched on, PERF keeps blinking in every mode
+		//RXl-20 (LXRE_MX): kit generator switched on, PERF keeps blinking in every mode
 		if(KitGenUi_isLatched()) led_setBlinkLed(LED_PERF,1);
 
 #else

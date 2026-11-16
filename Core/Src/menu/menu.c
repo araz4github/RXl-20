@@ -11,10 +11,10 @@
 #include "Soundengine/DSPAudio/FX/lxr0_reverbBus.h"
 #include "menu/menu.h"
 #include "menu/randomizer.h"	// MODIFIED: parameter randomizer
-#include "Preset/kitGen.h"		// RXl-0 (LXRE_MX): kit generator
+#include "Preset/kitGen.h"		// RXl-20 (LXRE_MX): kit generator
 #include "Preset/kitGenUi.h"
-#include "fxRoute.h"				// RXl-0 (LXRE_MX): SHIFT+FX voice routing
-#include "drumStealer.h"	// RXl-0
+#include "fxRoute.h"				// RXl-20 (LXRE_MX): SHIFT+FX voice routing
+#include "drumStealer.h"	// RXl-20
 #include "lcd.h"
 #include <string.h>
 #include <stdlib.h>
@@ -338,7 +338,7 @@ const Name valueNames[NUM_NAMES] =
 
 //---------------------------------------------------------------
 // Parameter types. These correspond with ParamEnums and entries in parameter_values
-const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-0: sized by its entries, checked against NUM_PARAMS below
+const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-20: sized by its entries, checked against NUM_PARAMS below
 	    /*PAR_NONE*/ 			DTYPE_0B127,							// 0
 	    /*PAR_OSC_WAVE_DRUM1*/ 	DTYPE_MENU | (MENU_WAVEFORM<<8),
 	    /*PAR_OSC_WAVE_DRUM2*/ 	DTYPE_MENU | (MENU_WAVEFORM<<8),
@@ -649,14 +649,14 @@ const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-0: sized by its entri
 		/*PAR_CV_SRC_18*/		DTYPE_MENU | (MENU_CV_SRC<<8),
 
 		// MODIFIED: FX bus B
-		/*PAR_FX2_TYPE*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_ROUTING*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_DRY_WET*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_RATIO*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_P1*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_P2*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_P3*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
-		/*PAR_FX2_P4*/		DTYPE_0B127,	// RXl-0: unused slot (FX bus B removed)
+		/*PAR_FX2_TYPE*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_ROUTING*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_DRY_WET*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_RATIO*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_P1*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_P2*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_P3*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
+		/*PAR_FX2_P4*/		DTYPE_0B127,	// RXl-20: unused slot (FX bus B removed)
 
 		// MODIFIED: voice 7 (separate open hi-hat)
 		/*PAR_HH7_VALID*/		DTYPE_0B127,
@@ -755,7 +755,7 @@ const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-0: sized by its entri
 		/*PAR_RAND_TARGET*/		DTYPE_MENU | (MENU_RND_TARGET<<8),
 		/*PAR_RAND_GO*/			DTYPE_MENU | (MENU_RND_ACT<<8),
 		/*PAR_RAND_UNDO*/		DTYPE_MENU | (MENU_RND_ACT<<8),
-		/*PAR_CPU_LOAD*/		DTYPE_0B255,	// RXl-0: display only
+		/*PAR_CPU_LOAD*/		DTYPE_0B255,	// RXl-20: display only
 		/*PAR_KGEN_TYPE*/		DTYPE_MENU | (MENU_KGEN_TYPE<<8),
 		/*PAR_KGEN_KEY*/		DTYPE_MENU | (MENU_KGEN_KEY<<8),
 		/*PAR_KGEN_MOD*/		DTYPE_ON_OFF,
@@ -797,7 +797,7 @@ const enum Datatypes PROGMEM parameter_dtypes[] = {	// RXl-0: sized by its entri
 		/*PAR_PATTERN_MODE*/ DTYPE_MENU | (MENU_PAT_MODE<<8),
 		/*PAR_MORPH_TARGET*/ 	DTYPE_0B127
 };
-_Static_assert(sizeof(parameter_dtypes)/sizeof(parameter_dtypes[0]) == NUM_PARAMS, "parameter_dtypes must have one entry per parameter (RXl-0 check)");
+_Static_assert(sizeof(parameter_dtypes)/sizeof(parameter_dtypes[0]) == NUM_PARAMS, "parameter_dtypes must have one entry per parameter (RXl-20 check)");
 
 
 
@@ -992,7 +992,7 @@ void menu_init()
 
 	activeParameters[PAR_BPM] = 120;
 
-	// RXl-0 (LXRE_MX): kit generator defaults: CLS, key off, MOD off, Hz soft
+	// RXl-20 (LXRE_MX): kit generator defaults: CLS, key off, MOD off, Hz soft
 	activeParameters[PAR_KGEN_TYPE] = RND_TYPE_CLS;
 	activeParameters[PAR_KGEN_KEY]  = 0;
 	activeParameters[PAR_KGEN_MOD]  = 0;
@@ -1241,7 +1241,7 @@ void menu_tick()
 			led_setMode2(SELECT_MODE_VOICE);
 			//set menu to voice page mode
 			menu_switchPage(menu_getActiveVoice());
-			buttonHandler_showVoiceEditLeds();	// RXl-0: was led_setActiveSelectButton(menu_getSubPage()+1)
+			buttonHandler_showVoiceEditLeds();	// RXl-20: was led_setActiveSelectButton(menu_getSubPage()+1)
 			menu_resetActiveParameter();
 		}
 	}
@@ -2122,7 +2122,7 @@ void menu_repaintGeneric()
 #endif
 					else if(parNr == PAR_CPU_LOAD)
 					{
-						// RXl-0 (LXRE_MX): "42%", from 100 on just the number (honest overrun, no clamp)
+						// RXl-20 (LXRE_MX): "42%", from 100 on just the number (honest overrun, no clamp)
 						if(curParmVal < 100)
 						{
 							valueAsText[0] = curParmVal >= 10 ? (char)('0' + curParmVal/10) : ' ';
@@ -2189,15 +2189,15 @@ void menu_repaint()
 	}
 	else if(drumStealer_paint(editDisplayBuffer))
 	{
-		// RXl-0: Drum Stealer
+		// RXl-20: Drum Stealer
 	}
 	else if(fxRoute_paint(editDisplayBuffer))
 	{
-		// RXl-0 (LXRE_MX): SHIFT+FX held, voices on FX A / FX B
+		// RXl-20 (LXRE_MX): SHIFT+FX held, voices on FX A / FX B
 	}
 	else if((menu_activePage == KGEN_PAGE) && KitGenUi_paint(editDisplayBuffer))
 	{
-		// RXl-0 (LXRE_MX): kit generator, recipe per voice while PERF is held
+		// RXl-20 (LXRE_MX): kit generator, recipe per voice while PERF is held
 	}
 	else if(buttonHandler_getDrumButton() && (menu_activePage != KGEN_PAGE))	// DRUM = new kit there, not voice select
 	{
@@ -3050,7 +3050,7 @@ static uint8_t getMaxEntriesForMenu(uint8_t menuId)
 		return linkAllocNames[0][0];
 	case MENU_LXR0_GLIDE_TYPE:
 		return glideTypeNames[0][0];
-	case MENU_KGEN_TYPE:	// RXl-0 (LXRE_MX)
+	case MENU_KGEN_TYPE:	// RXl-20 (LXRE_MX)
 		return kgenTypeNames[0][0];
 	case MENU_KGEN_KEY:
 		return kgenKeyNames[0][0];
@@ -3194,7 +3194,7 @@ static void getMenuItemNameForValue(const uint8_t menuId, const uint8_t curParmV
 	case MENU_LXR0_GLIDE_TYPE:
 		p=glideTypeNames[curParmVal+1];
 			break;
-	case MENU_KGEN_TYPE:	// RXl-0 (LXRE_MX)
+	case MENU_KGEN_TYPE:	// RXl-20 (LXRE_MX)
 		p = (curParmVal < kgenTypeNames[0][0]) ? kgenTypeNames[curParmVal+1] : menuText_dash;
 		break;
 	case MENU_KGEN_KEY:
@@ -3309,7 +3309,7 @@ void menu_parseEncoder(int8_t inc, uint8_t button)
 		return;
 	}
 #endif
-	if(drumStealer_isActive())	// RXl-0: the encoder browses the source kits, the click does nothing
+	if(drumStealer_isActive())	// RXl-20: the encoder browses the source kits, the click does nothing
 	{
 		lastEncoderButton = button;
 		drumStealer_encoder(inc);
@@ -3445,7 +3445,7 @@ static void menu_encoderChangeParameter(int8_t inc)
 		paramNr		= pgm_read_word(&menuPages[menu_activePage][activePage].bot1 + activeParameter);
 	}
 	//uint8_t *paramValue = &mainParameters[paramNr];
-	if(paramNr == PAR_CPU_LOAD) return;			// RXl-0: display only
+	if(paramNr == PAR_CPU_LOAD) return;			// RXl-20: display only
 	uint8_t *paramValue;
 
 	paramValue = &activeParameters[paramNr];
@@ -3858,7 +3858,7 @@ void menu_switchSubPage(uint8_t subPageNr, uint8_t toggle)
 		&& (buttonHandler_getMode() != SELECT_MODE_MOD)
 #endif
 		) {
-		// RXl-0: FX page cycles FX A (screen 1, screen 2) -> reverb -> Random -> FX A (Golem's FX bus B is removed)
+		// RXl-20: FX page cycles FX A (screen 1, screen 2) -> reverb -> Random -> FX A (Golem's FX bus B is removed)
 		if((activeParameter < 4) && has2ndPage(activePage)) {
 			activeParameter = 4;
 #if LXR0_REVERB
@@ -4001,7 +4001,7 @@ void menu_switchPage(uint8_t pageNr)
 		break;
 
 	case FX_MODE_PAGE:
-		// RXl-0: FX cycles FX A -> RMX-0 reverb -> Random -> FX A (2nd screens in between).
+		// RXl-20: FX cycles FX A -> RMX-0 reverb -> Random -> FX A (2nd screens in between).
 		// If one of the extra pages is showing, toggle from it instead of jumping back to bus A.
 		if((menu_activePage == FX_MODE_PAGE) && ((menu_getSubPage() == RANDOM_SUBPAGE)
 #if LXR0_REVERB
@@ -4844,7 +4844,7 @@ void menu_lxr0OpenLink(const uint8_t voice)
 //-----------------------------------------------------------------
 uint8_t menu_parseKnobValue(uint8_t potNr, int16_t diff)
 {
-	if(drumStealer_isActive()) return 0;	// RXl-0: pots do nothing in Drum Stealer
+	if(drumStealer_isActive()) return 0;	// RXl-20: pots do nothing in Drum Stealer
 	screensaver_touch();
 	preset_touchTimer(PRESET_KIT_TIMER);
 
@@ -4892,7 +4892,7 @@ uint8_t menu_parseKnobValue(uint8_t potNr, int16_t diff)
 
 	//parameter fetch. given the value of the pot, and the parameter number
 	// fetch the actual numeric value that the parameter should be set to
-	if(paramNr == PAR_CPU_LOAD) return 0;		// RXl-0: display only
+	if(paramNr == PAR_CPU_LOAD) return 0;		// RXl-20: display only
 	uint8_t dtypeValue = limitPotValue(diff, paramNr);//getDtypeValue(potValue,paramNr);
 #if !EURORACK_MODULE
 	menu_processSpecialCaseValues(paramNr/*,&dtypeValue*/);
@@ -5330,7 +5330,7 @@ void upr_three(char *buf)
 	END_DISABLE_CONV_WARNING
 }
 //-----------------------------------------------------------------
-// RXl-0 (from LXRE_MX): CPU load (Soundengine.c, peak weighted) -> CONFIG page, ~4x per second
+// RXl-20 (from LXRE_MX): CPU load (Soundengine.c, peak weighted) -> CONFIG page, ~4x per second
 void menu_updateCpuLoad()
 {
 	static uint32_t last = 0;
@@ -5345,7 +5345,7 @@ void menu_updateCpuLoad()
 		menu_repaint();
 }
 //-----------------------------------------------------------------
-// RXl-0 (from LXRE_MX): kit generator page
+// RXl-20 (from LXRE_MX): kit generator page
 void menu_enterKitGenPage()
 {
 	if(menu_activePage != KGEN_PAGE)

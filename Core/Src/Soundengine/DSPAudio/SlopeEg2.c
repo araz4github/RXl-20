@@ -147,14 +147,14 @@ double slopeEg2_calcTime(uint8_t data2, double amount)
 
 }
 //--------------------------------------------------
-/*RXl-0: out of ITCM, not per sample*/ void slopeEg2_setAttack(SlopeEg2* eg, uint8_t data2, uint8_t isSync)
+/*RXl-20: out of ITCM, not per sample*/ void slopeEg2_setAttack(SlopeEg2* eg, uint8_t data2, uint8_t isSync)
 {
 	eg->attack = slopeEg2_calcTime(data2,TIME_K_ATTACK);
 	if(isSync)
 		eg->attack /= 16;
 };
 //--------------------------------------------------
-/*RXl-0: out of ITCM, not per sample*/ void slopeEg2_setDecay(SlopeEg2* eg, uint8_t data2, uint8_t isSync)
+/*RXl-20: out of ITCM, not per sample*/ void slopeEg2_setDecay(SlopeEg2* eg, uint8_t data2, uint8_t isSync)
 {
 	eg->decay = slopeEg2_calcTime(data2,TIME_K_DECAY);
 	if(isSync)
@@ -166,7 +166,7 @@ double slopeEg2_calcDecay(uint8_t data2)
 	return slopeEg2_calcTime(data2,TIME_K_DECAY);
 };
 //--------------------------------------------------
-/*RXl-0: out of ITCM, not per sample*/ void slopeEg2_setSlope(SlopeEg2* eg, uint8_t data2)
+/*RXl-20: out of ITCM, not per sample*/ void slopeEg2_setSlope(SlopeEg2* eg, uint8_t data2)
 {
 	const double amount 	 	= ((data2/127.f)-0.5f)*1.999f;
 	//negate the amount

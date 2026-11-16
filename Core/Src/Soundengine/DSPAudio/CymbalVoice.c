@@ -179,7 +179,7 @@ IN_ITCM_RAM void Cymbal_calcAsync()
 
 }
 //---------------------------------------------------
-IN_ITCM_RAM void Cymbal_calcSyncBlock(int16_t* buf, const uint8_t size)	// RXl-0: ITCM
+IN_ITCM_RAM void Cymbal_calcSyncBlock(int16_t* buf, const uint8_t size)	// RXl-20: ITCM
 {
 		int16_t mod[size];
 		int16_t mod2[size];

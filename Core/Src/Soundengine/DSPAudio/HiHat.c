@@ -21,11 +21,11 @@
 #include "IO/adcPots.h"
 #include "Soundengine/FxBus.h"
 #include "Soundengine/DSPAudio/lxr0_declick.h"
-#include <string.h>	// RXl-0: memset
+#include <string.h>	// RXl-20: memset
 
 INDTCMZ HiHatVoice hatVoice;
 // MODIFIED: separate open hi-hat voice (voice 7).
-// RXl-0: in zero-wait DTCM like voices 1-6 (Golem kept it in normal RAM). .dtcmz is not cleared at
+// RXl-20: in zero-wait DTCM like voices 1-6 (Golem kept it in normal RAM). .dtcmz is not cleared at
 // start-up, so HiHat_init() clears it first, as .bss was before.
 INDTCMZ HiHatVoice hatVoice2;
 uint8_t hatVoice2_choke = 1;
@@ -99,7 +99,7 @@ static void hh_init(HiHatVoice* h)
 void HiHat_init()
 {
 	hh_init(&hatVoice);
-	memset(&hatVoice2, 0, sizeof(hatVoice2));	// RXl-0: DTCM is not zeroed at start-up
+	memset(&hatVoice2, 0, sizeof(hatVoice2));	// RXl-20: DTCM is not zeroed at start-up
 	hh_init(&hatVoice2);	// MODIFIED: voice 7
 	hatVoice2_choke = 1;
 }
@@ -225,7 +225,7 @@ void HiHat_calcAsync( )
 	hh_calcAsync(&hatVoice2);
 }
 //---------------------------------------------------
-// RXl-0: back in ITCM (room made by moving parameter setters out); serves voices 6 and 7
+// RXl-20: back in ITCM (room made by moving parameter setters out); serves voices 6 and 7
 IN_ITCM_RAM static void hh_calcSyncBlock(HiHatVoice* h, int16_t* buf, const uint8_t size)
 {
 	//2 buffers for the mod oscs

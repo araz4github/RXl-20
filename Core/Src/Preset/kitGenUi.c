@@ -7,7 +7,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
  * (Golem's parameter randomizer is menu/randomizer.c) and extended to Golem's voice 7.
  *
  * This file is part of the LXR firmware. It is licensed under the GNU General
@@ -34,7 +34,7 @@
 #define BAR_HOLD_TICKS		(120u * TICKS_PER_MS)	// full bar stays a moment
 #define PERF_HOLD_TICKS		(450u * TICKS_PER_MS)	// PERF held this long -> recipe view
 
-#define ALL_VOICES			0x7f	// RXl-0: 7 voices (bit 6 = Golem's open hi-hat)
+#define ALL_VOICES			0x7f	// RXl-20: 7 voices (bit 6 = Golem's open hi-hat)
 #define BAR_STEPS			7						// buttons 2..8 (V1..V6 + open hihat)
 
 static uint8_t  rnd_latched;		// randomizer mode switched on (SHIFT+PERF)
@@ -57,7 +57,7 @@ static uint32_t rnd_counter;
 static const char rnd_keyText[12][3] = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B" };
 
 //--------------------------------------------------------------------------
-// held voice buttons -> voice mask (RXl-0: button 7 = voice 7, Golem's open hi-hat)
+// held voice buttons -> voice mask (RXl-20: button 7 = voice 7, Golem's open hi-hat)
 static uint8_t heldVoices()
 {
 	uint8_t m = 0;

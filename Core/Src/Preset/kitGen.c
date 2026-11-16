@@ -21,7 +21,7 @@
  * Copyright (C) 2012-2026 Erica Synths
  * SPDX-License-Identifier: GPL-3.0-only
  *
- * RXl-0: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
+ * RXl-20: ported from LXRE_MX v1.1.1 by Roman (RN01MA), renamed from Randomizer*
  * (Golem's parameter randomizer is menu/randomizer.c) and extended to Golem's voice 7.
  *
  * This file is part of the LXR firmware. It is licensed under the GNU General
@@ -132,8 +132,8 @@ enum RndRoles
 };
 
 #define NA (-1)
-#define KGEN_V7 6	// RXl-0: index of voice 7 (Golem's open hi-hat)
-#define KGEN_V7_GAP 6	// RXl-0: open decay at least this much above the closed one (as voice 6's own clamp)
+#define KGEN_V7 6	// RXl-20: index of voice 7 (Golem's open hi-hat)
+#define KGEN_V7_GAP 6	// RXl-20: open decay at least this much above the closed one (as voice 6's own clamp)
 // parameter of each role per voice (NA = engine has no such parameter)
 static const int16_t rolePar[7][R_NUM] =
 {
@@ -209,7 +209,7 @@ static const int16_t rolePar[7][R_NUM] =
 	  NA, NA, NA,
 	  PAR_PWM_6, PAR_VOL6, PAR_VOICE_DECIMATION6 },
 
-	// RXl-0: voice 7, Golem's separate open hi-hat. Same engine as voice 6, so the same roles;
+	// RXl-20: voice 7, Golem's separate open hi-hat. Same engine as voice 6, so the same roles;
 	// its only decay is the open one (R_AEGD), and it has no LFO of its own.
 	{ PAR_HH7_WAVE1, PAR_HH7_WAVE2, PAR_HH7_WAVE3,
 	  PAR_HH7_COARSE, PAR_HH7_FINE,
@@ -235,7 +235,7 @@ static const uint8_t roleDefault[7][R_NUM] =
 	{  1,  0,  0, 45, 64,  0, 10,  0, 10, 81, 15, 14,  0,  0,  0,  0,  0,  0,  0,  0,127,  0,  0, 63,  0,  0,  0, 61,127,  0,  0,127,127 },
 	{  4,  0,  0,127, 63,  0,107,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1, 68,  0,  0, 63,  0,  0,  0,  0,  0,  0,  0,127,127 },
 	{  0,  0,  0, 50, 63,  0,  5, 17,  6,  0,  0,  0,  0,  0,  0, 56,127,127,127,  1,104,  0,  0, 63,  0,  0,  0,  0,  0,  0,  0,127,127 },
-	// RXl-0: voice 7 = voice 6 with the open decay as its decay
+	// RXl-20: voice 7 = voice 6 with the open decay as its decay
 	{  0,  0,  0, 50, 63,  0, 17,  0,  6,  0,  0,  0,  0,  0,  0, 56,127,127,127,  1,104,  0,  0, 63,  0,  0,  0,  0,  0,  0,  0,127,127 },
 };
 
@@ -943,7 +943,7 @@ static float applyVoice(uint8_t* p, uint8_t v, uint8_t a, const GenCtx* g, Rng* 
 	for(uint8_t role=0; role<R_NUM; role++)
 	{
 		const RndRange* rg = &A->r[role];
-		// RXl-0: voice 7 is an open hi-hat - its decay comes from the recipe's open-decay range
+		// RXl-20: voice 7 is an open hi-hat - its decay comes from the recipe's open-decay range
 		if((v == KGEN_V7) && (role == R_AEGD) && A->r[R_AEGDOPEN].c1) rg = &A->r[R_AEGDOPEN];
 		if((v == KGEN_V7) && (role == R_AEGDOPEN)) continue;
 		if(!rg->c1) continue;
@@ -1429,7 +1429,7 @@ void KitGen_generate(uint8_t* p, const KitGenConfig* cfg, uint32_t seed, KitGenR
 		}
 	}
 
-	// RXl-0: voice 7, Golem's separate open hi-hat. With voice 6 rolled as well, voice 7 is
+	// RXl-20: voice 7, Golem's separate open hi-hat. With voice 6 rolled as well, voice 7 is
 	// voice 6's new sound with voice 6's open decay, so the two hats are one instrument (as the
 	// stock firmware's shared hat). Rolled alone, it gets its own voice 6 recipe, open decay.
 	uint8_t a7 = RND_A_LOCKED;
@@ -1522,7 +1522,7 @@ void KitGen_generate(uint8_t* p, const KitGenConfig* cfg, uint32_t seed, KitGenR
 		for(uint8_t v=0; v<7; v++)
 		{
 			if(cfg->lockMask & (1u << v)) continue;
-			// RXl-0: voice 7 rolled with voice 6 sits with it, as one hi-hat
+			// RXl-20: voice 7 rolled with voice 6 sits with it, as one hi-hat
 			if((v == KGEN_V7) && !(cfg->lockMask & (1u << 5)))
 			{
 				p[panPar[v]] = p[panPar[5]];

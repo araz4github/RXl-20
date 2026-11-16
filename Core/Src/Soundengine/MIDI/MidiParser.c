@@ -1157,7 +1157,7 @@ void midiParser_ccHandler(MidiMsg msg, uint8_t updateOriginalValue, uint8_t isFl
 		{
 //			frontPanel_sendData(CC3,(uint8_t)(paramNr-255),dtypeValue);
 			paramNr = msg.data1 + 255;
-			// MODIFIED: voice 7 (separate open hi-hat) parameters (RXl-0: FX bus B removed)
+			// MODIFIED: voice 7 (separate open hi-hat) parameters (RXl-20: FX bus B removed)
 			if((paramNr >= PAR_HH7_COARSE) && (paramNr <= PAR_HH7_CHOKE) && !isFloatModulator)
 			{
 				midiParser_hihat7SetParam(paramNr, value.itg);
@@ -1646,7 +1646,7 @@ void midiParser_ccHandler(MidiMsg msg, uint8_t updateOriginalValue, uint8_t isFl
 				fxBus.fxType = value.itg;
 				FxBus_updateParameter();
 				//change visible parameters to selected FX type
-				if((menu_activePage == FX_MODE_PAGE) && (menu_getSubPage() != RANDOM_SUBPAGE)) // MODIFIED: stay on the random page (RXl-0: FX bus B removed)
+				if((menu_activePage == FX_MODE_PAGE) && (menu_getSubPage() != RANDOM_SUBPAGE)) // MODIFIED: stay on the random page (RXl-20: FX bus B removed)
 				{
 					if(menu_getSubPage() != fxBus.fxType)
 						menu_switchSubPage(fxBus.fxType, 1 );

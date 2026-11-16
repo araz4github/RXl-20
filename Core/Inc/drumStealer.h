@@ -1,7 +1,7 @@
 /*
  * drumStealer.h
  *
- * RXl-0 Drum Stealer: borrow one drum sound from another kit.
+ * RXl-20 Drum Stealer: borrow one drum sound from another kit.
  *
  * In voice edit mode hold SHIFT, hold the target voice button, press DRUM.
  * - the encoder browses the stored kits 0..127 (read from RAM, never from the SD card)
